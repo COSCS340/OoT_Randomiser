@@ -82,17 +82,11 @@ int main(int argc, char** argv)
 			printf("Id: %02x, Chest_id: %04x\n", items[i].id, items[i].chest_id);
 	}
 
-	//Free up memory in the stupidest way possible...
+	//Free up memory
 	for(i = 0; i < NUM_CHESTS; i++)
 		delete chests[i];
-	for(i = 0; i < NUM_ITEMS; i++)
-	{
-		delete items[i].name.c_str();
-		items[i].unlocks.clear();
-		items[i].unlocks.shrink_to_fit();
-	}	
-	free(chests);
-	free(items);
+	delete[] chests;
+	delete[] items;
 	
 	return(0);
 }

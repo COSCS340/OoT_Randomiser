@@ -25,7 +25,7 @@ int num_progression = 0;
 
 void makeItems()
 {
-	items = (Item*)malloc(sizeof(Item) * NUM_ITEMS);
+	items = new Item[NUM_ITEMS];
 	
 	items[0].name = "Bombchus (10)";
 	items[0].id = 0x03;

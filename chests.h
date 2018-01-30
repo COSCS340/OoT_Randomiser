@@ -27,8 +27,8 @@ int chests_available = 0;
 
 void makeChests()
 {
-	chests = (Chest**)malloc(sizeof(Chest*) * NUM_CHESTS);
-
+	chests = new Chest*[NUM_CHESTS];
+ 
 	//Mido's House (Top Left)
 	chests[0] = new Chest;
 	chests[0]->name = "Mido's House 0";
