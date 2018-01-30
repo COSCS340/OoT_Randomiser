@@ -3,7 +3,9 @@
 Commiting stuff:
 
 git add FILE
+
 git commit -m "Note"
+
 git push -u origin master
 
 -------------------------------------------------
