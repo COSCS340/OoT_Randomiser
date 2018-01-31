@@ -1,0 +1,56 @@
+Child only
+Mido removed
+Know it all Brother removed
+Gate to Death Mountian removed.
+
+No requirement chests:
+	Mido's House chest 1
+	Mido's House chest 2
+	Mido's House chest 3
+	Mido's House chest 4
+	Kokiri Sword chest
+	Deku Tree map chest
+	Deku Tree compass chest
+	Deku Tree slingshot chest
+	Deku Tree small chest (slingshot room)
+	Deku Tree small chest (compass room)
+	Deku Tree small chest (basement)
+	Fairy Fountian Grave chest
+
+Ocarina of Time:
+	(+Golden scale) Zora's Domain chest
+	(+Bombs)			 Zora's Domain chest
+	(+Bombchus)		 Zora's Domain chest
+	(+Din's fire)	 Royal Family Tomb chest
+
+Bombs:
+	Dodongo's Cavern map chest
+	Dodongo's Cavern compass chest
+	Dodongo's Cavern Bomb bag chest
+	Dodongo's Cavern small chest (bridge)
+	Dodongo's Cavern small chest (spike trap room)
+	Dodongo's Cavern smll chest (boss room)
+	Lost Woods Grotto chest
+	Kakariko Grotto chest
+	Zora's Domain chest (Use the chicken)
+
+Bombchus:
+	Dodongo's Cavern map chest
+	Dodongo's Cavern compass chest
+	Dodongo's Cavern Bomb bag chest
+	Dodongo's Cavern small chest (bridge)
+	Dodongo's Cavern small chest (spike trap room)
+	Dodongo's Cavern smll chest (boss room)
+	Lost Woods Grotto chest
+	Kakariko Grotto chest
+	Zora's Domain chest (Use the chicken)
+
+Goron Bracelet:
+	Dodongo's Cavern map chest
+	Dodongo's Cavern compass chest
+	Dodongo's Cavern Bomb bag chest
+	Dodongo's Cavern small chest (spike trap room)
+	Dodongo's Cavern smll chest (boss room)
+
+Golden Scale:
+	Zora's Domain chest (Use the chicken)

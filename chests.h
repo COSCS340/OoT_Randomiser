@@ -75,7 +75,7 @@ void sortChests()
 	for(int i = 0; i < NUM_CHESTS; i++)
 		for(int j = 0; j < NUM_CHESTS-i-1; j++)
 			if(*chests[j+1] < *chests[j])
-				swap(chests[j], chests[j+1]);
+				swap(chests[j+1], chests[j]);
 }
 
 #endif

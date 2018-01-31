@@ -19,7 +19,7 @@ int main(int argc, char** argv)
 	unsigned char* data;
 	unsigned char temp;
 	int i, seed;
-
+	
 	if(ErrorCheck(argc, argv))
 		return(-1);
 
@@ -38,7 +38,7 @@ int main(int argc, char** argv)
 			chests_available++;
 
 	for(i = 0; i < NUM_ITEMS; i++)
-		if(items[i].unlocks.size() != 0)
+		if(items[i]->unlocks.size() != 0)
 			num_progression++;
 
 	//Read the data from the source ROM
@@ -51,7 +51,7 @@ int main(int argc, char** argv)
 	//Sort the items by availibility, with progression items at the begining of the list
 	//Call the randomiser
 	sortChests();
-	sort(items, items+NUM_ITEMS);
+	sortItems();
 	randomise();
 
 	//Edit the data with new chest values
@@ -79,12 +79,14 @@ int main(int argc, char** argv)
 
 		printf("Items:\n");
 		for(i = 0; i < NUM_ITEMS; i++)
-			printf("Id: %02x, Chest_id: %04x\n", items[i].id, items[i].chest_id);
+			printf("Id: %02x, Chest_id: %04x\n", items[i]->id, items[i]->chest_id);
 	}
 
 	//Free up memory
 	for(i = 0; i < NUM_CHESTS; i++)
 		delete chests[i];
+	for(i = 0; i < NUM_ITEMS; i++)
+		delete items[i];
 	delete[] chests;
 	delete[] items;
 	
@@ -109,24 +111,24 @@ void randomise()
 
 		//Combine the item's chest value, and the chest's id value to place the
 		//item in the chest, then set some flags for the next iteration to use
-		chests[rChest]->flags = chests[rChest]->flags | items[rItem].chest_id;
+		chests[rChest]->flags = chests[rChest]->flags | items[rItem]->chest_id;
 		chests[rChest]->available = false;
 		chests[rChest]->used = true;
-		items[rItem].used = true;
+		items[rItem]->used = true;
 		chests_available--;
 
 		//If the item was a progression item, unlock the chests in it's unlocks vector
-		if(items[rItem].unlocks.size() != 0)
+		if(items[rItem]->unlocks.size() != 0)
 		{
 			num_progression--;
 
-			for(i = 0; i < items[rItem].unlocks.size(); i++)
+			for(i = 0; i < items[rItem]->unlocks.size(); i++)
 			{
-				if(items[rItem].unlocks[i]->used)
+				if(items[rItem]->unlocks[i]->used)
 					continue;
-				if(!items[rItem].unlocks[i]->available)
+				if(!items[rItem]->unlocks[i]->available)
 				{
-					items[rItem].unlocks[i]->available = true;
+					items[rItem]->unlocks[i]->available = true;
 					chests_available++;
 				}
 			}
@@ -134,8 +136,13 @@ void randomise()
 
 		//Sort the chests and items again
 		sortChests();
-		sort(items, items+NUM_CHESTS);
+		sortItems();
 	}
+}
+
+void extraChecks(unsigned char id)
+{
+	return;
 }
 
 bool ErrorCheck(int argc, char** argv)
@@ -151,7 +158,7 @@ bool ErrorCheck(int argc, char** argv)
 	input.open(argv[1], ios::binary);
 	if(input.fail())
 	{
-		printf("Error: File not found\n");
+		perror(argv[1]);
 		input.close();
 		return(true);
 	}
