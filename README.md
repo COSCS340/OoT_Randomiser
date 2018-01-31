@@ -5,13 +5,19 @@
 TODO List
 
 Find chests:
+
     1. Deku Tree
+
     2. Dodongo's Cavern
+
     3. Jabu Jabu's Belly
+
     4. Kakariko + Graveyard
+
     5. Zora’s Domain
 
 Add items:
+
     1. A bunch of them
 
 Figure out how to edit grotto chests
