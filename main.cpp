@@ -1,25 +1,44 @@
 #include <iostream>
 #include <fstream>
 #include <ctime>
-#include "chests.h"
-#include "items.h"
 using namespace std;
 
 #define GAME_SIZE 67108864
 #define DEBUG true
 
-void randomise();
 bool ErrorCheck(int, char**);
+
+struct Args
+{
+	struct Item** items;
+	struct Item** combo;
+	int num_progression;
+	void makeItems();
+	void sortItems();
+	void makeCombo();
+
+	struct Chest** chests;
+	int chests_available;
+	void makeChests();
+	void sortChests();
+
+	void randomise();
+};
+
+#include "chests.h"
+#include "items.h"
 
 int main(int argc, char** argv)
 {
+	Args arg;
 	ifstream input;
 	ofstream output;
 	string name;
 	unsigned char* data;
 	unsigned char temp;
-	int i, seed;
-	
+	unsigned int seed;
+	int i;
+
 	if(ErrorCheck(argc, argv))
 		return(-1);
 
@@ -29,17 +48,17 @@ int main(int argc, char** argv)
 	srand(seed);
 	
 	//Fill items and chests arrays
-	makeChests();
-	makeItems();
+	arg.makeChests();
+	arg.makeItems();
 
 	//Count available chests and progression items
 	for(i = 0; i < NUM_CHESTS; i++)
-		if(chests[i]->available)
-			chests_available++;
-
+		if(arg.chests[i]->available)
+			arg.chests_available++;
+	
 	for(i = 0; i < NUM_ITEMS; i++)
-		if(items[i]->unlocks.size() != 0)
-			num_progression++;
+		if(arg.items[i]->unlocks.size() != 0)
+			arg.num_progression++;
 
 	//Read the data from the source ROM
 	data = (unsigned char*)malloc(GAME_SIZE);
@@ -50,17 +69,17 @@ int main(int argc, char** argv)
 	//Sort the chests availability
 	//Sort the items by availibility, with progression items at the begining of the list
 	//Call the randomiser
-	sortChests();
-	sortItems();
-	randomise();
+	arg.sortChests();
+	arg.sortItems();
+	arg.randomise();
 
 	//Edit the data with new chest values
 	for(i = 0; i < NUM_CHESTS; i++)
 	{
-		temp = chests[i]->flags >> 8;
-		data[chests[i]->offset] = temp;
-		temp = chests[i]->flags;
-		data[chests[i]->offset+1] = temp;
+		temp = arg.chests[i]->flags >> 8;
+		data[arg.chests[i]->offset] = temp;
+		temp = arg.chests[i]->flags;
+		data[arg.chests[i]->offset+1] = temp;
 	}
 
 	//Write the edited data to a new file
@@ -75,27 +94,25 @@ int main(int argc, char** argv)
 	{
 		printf("Chests:\n");
 		for(i = 0; i < NUM_CHESTS; i++)
-			printf("Offset: 0x%08x - Flags: 0x%04x - Used: %i\n", chests[i]->offset, chests[i]->flags, chests[i]->used);
+			printf("Offset: 0x%08x - Flags: 0x%04x - Used: %i\n", arg.chests[i]->offset, arg.chests[i]->flags, arg.chests[i]->used);
 
 		printf("Items:\n");
 		for(i = 0; i < NUM_ITEMS; i++)
-			printf("Id: %02x, Chest_id: %04x\n", items[i]->id, items[i]->chest_id);
+			printf("Id: %02x, Chest_id: %04x\n", arg.items[i]->id, arg.items[i]->chest_id);
 	}
 
 	//Free up memory
 	for(i = 0; i < NUM_CHESTS; i++)
-		delete chests[i];
-	for(i = 0; i < NUM_ITEMS; i++)
-		delete items[i];
-	delete[] chests;
-	delete[] items;
+		delete arg.chests[i];
+	delete[] arg.chests;
+	delete[] arg.items;
 	
 	return(0);
 }
 
-void randomise()
+void Args::randomise()
 {
-	int i, rChest, rItem;
+	int i = 0, rChest, rItem;
 
 	while(chests_available > 0)
 	{
@@ -111,6 +128,7 @@ void randomise()
 
 		//Combine the item's chest value, and the chest's id value to place the
 		//item in the chest, then set some flags for the next iteration to use
+		chests[rChest]->flags = chests[rChest]->flags & 0xF01F;
 		chests[rChest]->flags = chests[rChest]->flags | items[rItem]->chest_id;
 		chests[rChest]->available = false;
 		chests[rChest]->used = true;
@@ -137,12 +155,8 @@ void randomise()
 		//Sort the chests and items again
 		sortChests();
 		sortItems();
+		i++;
 	}
-}
-
-void extraChecks(unsigned char id)
-{
-	return;
 }
 
 bool ErrorCheck(int argc, char** argv)
@@ -158,7 +172,7 @@ bool ErrorCheck(int argc, char** argv)
 	input.open(argv[1], ios::binary);
 	if(input.fail())
 	{
-		perror(argv[1]);
+		printf("Error: File not found\n");
 		input.close();
 		return(true);
 	}

@@ -8,9 +8,6 @@ using namespace std;
 
 #define NUM_ITEMS 5
 
-void makeItems();
-void sortItems();
-
 struct Item
 {
 	bool used;						/*If item has been placed*/
@@ -22,20 +19,18 @@ struct Item
 	bool operator==(const Item&) const;
 };
 
-Item** items;
-int num_progression = 0;
-
-void makeItems()
+void Args::makeItems()
 {
 	items = new Item*[NUM_ITEMS];
+	num_progression = 0;
 
 	items[0] = new Item;
 	items[0]->name = "Bombchus (10)";
 	items[0]->id = 0x03;
 	items[0]->chest_id = 0x0060;
 	items[0]->used = false;
-	items[0]->unlocks.resize(4);
-	items[0]->unlocks = {chests[0], chests[1], chests[2], chests[3]};
+	items[0]->unlocks.resize(0);
+	items[0]->unlocks = {};
 
 	items[1] = new Item;
 	items[1]->name = "Fairy Slingshot";
@@ -70,6 +65,22 @@ void makeItems()
 	items[4]->unlocks = {};
 }
 
+void Args::makeCombo()
+{
+	combo = new Item*[3];
+	combo[0] = items[0];
+	combo[1] = items[1];
+	combo[2] = items[2];
+}
+
+void Args::sortItems()
+{
+	for(int i = 0; i < NUM_ITEMS; i++)
+		for(int j = 0; j < NUM_ITEMS-i-1; j++)
+			if(*items[j+1] < *items[j])
+				swap(items[j+1], items[j]);
+}
+
 bool Item::operator<(const Item& i)
 {
 	if(this->used < i.used)
@@ -78,14 +89,6 @@ bool Item::operator<(const Item& i)
 		return(false);
 	else
 		return(this->unlocks.size() > i.unlocks.size());
-}
-
-void sortItems()
-{
-	for(int i = 0; i < NUM_ITEMS; i++)
-		for(int j = 0; j < NUM_ITEMS-i-1; j++)
-			if(*items[j+1] < *items[j])
-				swap(items[j+1], items[j]);
 }
 
 bool Item::operator==(const Item& i) const
