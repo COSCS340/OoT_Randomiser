@@ -1,0 +1,21 @@
+<FORMAT>
+
+chests[x] = new Chest;
+chests[x]->name = "string";
+chests[x]->offset = 0x12345678;
+chests[x]->flags = 0x1234;
+chests[x]->available = true;
+chests[x]->used = false;
+
+//Deku Tree's available will be true, all other are false
+
+</FORMAT>
+
+
+
+
+<CHESTS>
+
+
+
+</CHESTS>
