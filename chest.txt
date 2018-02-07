@@ -95,21 +95,21 @@ chests[x] = new Chest;
 chests[x]->name = "JJ Compass Chest";
 chests[x]->offset = 0x02796000;
 chests[x]->flags = 0xb804;
-chests[x]->available = true; // double check
+chests[x]->available = false;
 chests[x]->used = false;
 
 chests[x] = new Chest;
 chests[x]->name = "JJ Map Chest";
 chests[x]->offset = 0x0278000;
 chests[x]->flags = 0x1822;
-chests[x]->available = true;  // double check
+chests[x]->available = false; 
 chests[x]->used = false;
 
 chests[x] = new Chest;
 chests[x]->name = "JJ Bomerang Chest";
 chests[x]->offset = 0x0278a0000;
 chests[x]->flags = 0x10c1;
-chests[x]->available = true;  // double check
+chests[x]->available = false;
 chests[x]->used = false;
 
 /*//////////////////*/
