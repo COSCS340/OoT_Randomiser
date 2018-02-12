@@ -116,35 +116,35 @@ chests[x]->used = false;
 
 chests[x] = new Chest;
 chests[x]->name = "DC Map Chest";
-chests[x]->offset = 0x01f2819e;
+chests[x]->offset = 0x01f28190;
 chests[x]->flags = 0x0828;
 chests[x]->available = false;
 chests[x]->used = false;
 
 chests[x] = new Chest;
 chests[x]->name = "DC Deku Shield Chest";
-chests[x]->offset = 0x1f281ce;
+chests[x]->offset = 0x1f281c0;
 chests[x]->flags = 0x552a;
 chests[x]->available = false;
 chests[x]->used = false;
 
 chests[x] = new Chest;
 chests[x]->name = "DC Bomb Bag Chest";
-chests[x]->offset = 0x01f890ce;
+chests[x]->offset = 0x01f890c0;
 chests[x]->flags = 0x0644;
 chests[x]->available = false;
 chests[x]->used = false;
 
 chests[x] = new Chest;
 chests[x]->name = "DC Red Rupee Chest";
-chests[x]->offset = 0x01f890de;
+chests[x]->offset = 0x01f890d0;
 chests[x]->flags = 0x59c6;
 chests[x]->available = false;
 chests[x]->used = false;
 
 chests[x] = new Chest;
 chests[x]->name = "DC Compass Chest";
-chests[x]->offset = 0x1faf0aa;
+chests[x]->offset = 0x01faf09c;
 chests[x]->flags = 0x0805;
 chests[x]->available = false;
 chests[x]->used = false;
