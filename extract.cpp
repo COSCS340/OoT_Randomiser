@@ -134,13 +134,13 @@ bool ErrorCheck(int argc, char** argv)
 	if(argc != 5)
 	{
 		printf("Usage: (Name of map) (Start offset) (End offset) (Indoor/Outdoor)\n");
-		return(true);
+		return true;
 	}
 
 	if(tolower(argv[4][0]) != 'i' and tolower(argv[4][0]) != 'o')
 	{
 		printf("Error: Need to specify indoor or outdoor map\n");
-		return(true);
+		return true;
 	}
 
 	if(strlen(argv[2]) != 8)
