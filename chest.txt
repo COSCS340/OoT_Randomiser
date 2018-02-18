@@ -131,4 +131,67 @@ chests[x]->flag = 0x06;
 chests[x]->available = true;
 chests[x]->used = false;
 
+/* Jabu-Jabu's Belly */
+
+chests[x] = new Chest;
+chests[x]->name = "JJ Compass Chest";
+chests[x]->offset = 0x02796000;
+chests[x]->flags = 0xb804;
+chests[x]->available = false;
+chests[x]->used = false;
+
+chests[x] = new Chest;
+chests[x]->name = "JJ Map Chest";
+chests[x]->offset = 0x0278000;
+chests[x]->flags = 0x1822;
+chests[x]->available = false; 
+chests[x]->used = false;
+
+chests[x] = new Chest;
+chests[x]->name = "JJ Bomerang Chest";
+chests[x]->offset = 0x0278a0000;
+chests[x]->flags = 0x10c1;
+chests[x]->available = false;
+chests[x]->used = false;
+
+/* Dodongo's Cavern */
+
+chests[x] = new Chest;
+chests[x]->name = "DC Map Chest";
+chests[x]->offset = 0x01f2819e;
+chests[x]->flags = 0x0828;
+chests[x]->available = false;
+chests[x]->used = false;
+
+chests[x] = new Chest;
+chests[x]->name = "DC Deku Shield Chest";
+chests[x]->offset = 0x01f281ce;
+chests[x]->flags = 0x552a;
+chests[x]->available = false;
+chests[x]->used = false;
+
+chests[x] = new Chest;
+chests[x]->name = "DC Bomb Bag Chest";
+chests[x]->offset = 0x01f890ce;
+chests[x]->flags = 0x0644;
+chests[x]->available = false;
+chests[x]->used = false;
+
+chests[x] = new Chest;
+chests[x]->name = "DC Red Rupee Chest";
+chests[x]->offset = 0x01f890de;
+chests[x]->flags = 0x59c6;
+chests[x]->available = false;
+chests[x]->used = false;
+
+chests[x] = new Chest;
+chests[x]->name = "DC Compass Chest";
+chests[x]->offset = 0x01faf0aa;
+chests[x]->flags = 0x0805;
+chests[x]->available = false;
+chests[x]->used = false;
+
+/*//////////////////*/
+
+
 </CHESTS>
