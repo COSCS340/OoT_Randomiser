@@ -1,0 +1,44 @@
+Kokiri Forest (Child):
+	N/A
+
+Kokiri Forest (Adult):
+	N/A
+
+Deku Tree (Child):
+	N/A
+
+Lost Woods (Child):
+	N/A
+
+Lost Woods (Adult):
+	N/A
+
+Hyrule Field (Child):
+	N/A
+
+Hyrule Field (Adult):
+	N/A
+
+Castle Market (Child):
+	N/A
+
+Castle Market (Adult):
+	N/A
+
+Hyrule Castle (Child):
+	N/A
+
+Ganon's Castle (Adult):
+	N/A
+
+Lon Lon Ranch (Child):
+	N/A
+
+Lon Lon Ranch (Adult):
+	N/A
+
+Kakariko Village(Child):
+	N/A
+
+Kakariko Village(Adult):
+	N/A

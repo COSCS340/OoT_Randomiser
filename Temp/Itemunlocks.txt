@@ -1,0 +1,69 @@
+Child only
+Mido removed
+Know it all Brother removed
+Gate to Death Mountian removed.
+
+No requirement chests:
+	00: Mido's House chest 0
+	01: Mido's House chest 1
+	02: Mido's House chest 2
+	03: Mido's House chest 3
+	04: Kokiri Sword chest
+	05: Deku Tree map chest
+	09: Deku Tree compass chest
+	06: Deku Tree slingshot chest
+	07: Deku Tree small chest (slingshot room)
+	10: Deku Tree small chest (compass room)
+	08: Deku Tree small chest (basement)
+	19: Fairy Fountian Grave chest
+	--: Kakariko Grotto 0 chest
+
+Ocarina of Time:
+	N/A
+
+Ocarina of Time ---AND--- Golden Scale
+	25: Zora's Domain chest
+
+Ocarina of Time ---AND--- Bombs:
+	25: Zora's Domain chest
+	
+Ocarina of Time ---AND--- Bombchus:
+	25: Zora's Domain chest
+
+Ocarina of Time ---AND--- Din's Fire:
+	21: Royal Family Tomb chest
+
+Bombs:
+	11: Dodongo's Cavern map chest
+	15: Dodongo's Cavern compass chest
+	14: Dodongo's Cavern small chest (spike trap room)
+	--: Lost Woods Grotto 0 chest
+	26: Kakariko Redead Grotto chest
+
+Bombs ---AND--- Slingshot:
+	12: Dodongo's Cavern small chest (bridge)	
+	13: Dodongo's Cavern Bomb bag chest
+	//TODO: Dodongo's Cavern small chest (boss room)
+
+Bombchus:
+	11: Dodongo's Cavern map chest
+	15: Dodongo's Cavern compass chest
+	14: Dodongo's Cavern small chest (spike trap room)
+	--: Lost Woods Grotto 0 chest
+	26: Kakariko Redead Grotto chest
+
+Bombchus ---AND--- Slingshot:
+	12: Dodongo's Cavern small chest (bridge)	
+	13: Dodongo's Cavern Bomb bag chest
+	--: Dodongo's Cavern smll chest (boss room)
+
+Goron Bracelet:
+	11: Dodongo's Cavern map chest
+	15: Dodongo's Cavern compass chest
+	14: Dodongo's Cavern small chest (spike trap room)
+
+Goron Bracelet ---AND--- Slingshot:
+	13: Dodongo's Cavern Bomb bag chest
+
+Golden Scale:
+	25: Zora's Domain chest
