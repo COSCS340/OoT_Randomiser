@@ -133,14 +133,11 @@ Gear* make_color_list() {
 }
 
 // create lists and modify game data
-void custom_colors( unsigned char** game_ptr ) {
+void custom_colors( unsigned char* game ) {
 
   Gear *list;
   Navi *navi;
   int i;
-
-  unsigned char *game;
-  game = *game_ptr;
 
   list = make_color_list();
   navi = make_navi();
@@ -180,8 +177,6 @@ void custom_colors( unsigned char** game_ptr ) {
   game[ navi->boss_addr+1 ] = navi->boss_G;
   game[ navi->boss_addr+2 ] = navi->boss_B;
   game[ navi->boss_addr+3 ] = navi->boss_a;
-
-  game_ptr = &game;
 
   free( list );
   free( navi );
