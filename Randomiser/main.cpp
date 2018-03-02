@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <ctime>
+#include <cstdint>
 using namespace std;
 
 #define GAME_SIZE 67108864
@@ -31,18 +32,18 @@ struct Args
 int main(int argc, char** argv)
 {
 	Args arg;
-	ifstream input;
-	ofstream output;
+	FILE* input;
+	FILE* output;
 	string name;
-	unsigned char* data;
-	unsigned char temp;
-	unsigned int seed;
-	int i;
+	uint8_t* data;
+	uint8_t temp;
+	uint32_t seed;
+	int32_t i;
 
 	if(ErrorCheck(argc, argv))
 		return(-1);
 
-	//Get and set the seed;
+	//Get and set the seed
 	srand(time(NULL));
 	(argc == 3) ? seed = atoi(argv[2]) : seed = rand();
 	srand(seed);
@@ -61,13 +62,12 @@ int main(int argc, char** argv)
 			arg.num_progression++;
 
 	//Read the data from the source ROM
-	data = (unsigned char*)malloc(GAME_SIZE);
-	input.open(argv[1], ios::binary);
-	input.read(reinterpret_cast<char*>(data), GAME_SIZE);
-	input.close();
+	data = new uint8_t[GAME_SIZE];
+	input = fopen(argv[1], "rb");
+	fread(data, GAME_SIZE, 1, input);
+	fclose(input);
 
-	//Sort the chests availability
-	//Sort the items by availibility, with progression items at the begining of the list
+	//Sort the chests and items
 	//Call the randomiser
 	arg.sortChests();
 	arg.sortItems();
@@ -84,10 +84,10 @@ int main(int argc, char** argv)
 
 	//Write the edited data to a new file
 	name = "ZOoTR_", name += to_string(seed), name += ".z64";
-	output.open(name, ios::binary);
-	output.write(reinterpret_cast<const char*>(data), GAME_SIZE);
-	output.close();
-	free(data);
+	output = fopen(name.c_str(), "wb");
+	fwrite(data, GAME_SIZE, 1, output);
+	fclose(output);
+	delete[] data;
 
 	//Optionally print out chest and item data
 	if(DEBUG)
@@ -112,7 +112,8 @@ int main(int argc, char** argv)
 
 void Args::randomise()
 {
-	int i = 0, rChest, rItem;
+	int i = 0;
+	int rChest, rItem;
 
 	while(chests_available > 0)
 	{
@@ -152,6 +153,7 @@ void Args::randomise()
 			}
 		}
 
+		printf("%s in %s\n", items[rItem]->name.c_str(), chests[rChest]->name.c_str());
 		//Sort the chests and items again
 		sortChests();
 		sortItems();
@@ -159,21 +161,42 @@ void Args::randomise()
 	}
 }
 
+void actorSetup(uint8_t* data)
+{
+	//Move Mido (X, Y, Z)
+	data[x] = 0x0000;
+	data[x] = 0x0010;
+	data[x] = 0x0000;
+
+	//Move other kokiri kid
+	data[x] = 0x0000;
+	data[x] = 0x0010;
+	data[x] = 0x0000;
+
+	//Open Death Mountian gate
+	data[x] = 0xff9c;
+	data[x] = 0x019a;
+	data[x] = 0xfa9c;
+
+	//Swap Silver Gauntlets with Green Rupee
+	//Unimplemented, waiting to figure out progressive upgrades
+}
+
 bool ErrorCheck(int argc, char** argv)
 {
-	ifstream input;
+	FILE* input;
 
 	if(argc < 2 or argc > 3)
 	{
-		printf("Usage: Randomise [File name] [Seed (Optional)]\n");
+		fprintf(stderr, "Usage: Randomise [File name] [Seed (Optional)]\n");
 		return(true);
 	}
 
-	input.open(argv[1], ios::binary);
-	if(input.fail())
+	input = fopen(argv[1], "rb");
+	if(input == NULL)
 	{
-		printf("Error: File not found\n");
-		input.close();
+		perror(argv[1]);
+		fclose(input);
 		return(true);
 	}
 

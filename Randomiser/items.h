@@ -10,11 +10,11 @@ using namespace std;
 
 struct Item
 {
-	bool used;						/*If item has been placed*/
-	string name;					/*Name of the item*/
-	unsigned char id;				/*Item number*/
-	unsigned short chest_id;	/*Value to override chest data*/
-	vector<Chest*> unlocks;		/*Chests that this item gives access to*/
+	bool used;                   /*If item has been placed*/
+	string name;                 /*Name of the item*/
+	unsigned char id;            /*Item number*/
+	unsigned short chest_id;     /*Value to override chest data*/
+	vector<Chest*> unlocks;      /*Chests that this item gives access to*/
 	bool operator<(const Item&);
 	bool operator==(const Item&) const;
 };
@@ -24,6 +24,7 @@ void Args::makeItems()
 	items = new Item*[NUM_ITEMS];
 	num_progression = 0;
 
+	//Fairy Slingshot
 	items[0] = new Item;
 	items[0]->name = "Fairy Slingshot";
 	items[0]->id = 0x05;
@@ -31,8 +32,8 @@ void Args::makeItems()
 	items[0]->used = false;
 	items[0]->unlocks.resize(0);
 	items[0]->unlocks = {};
-	//Unlocks: Bomb bag chest
 
+	//Boomerang
 	items[1] = new Item;
 	items[1]->name = "Boomerang";
 	items[1]->id = 0x06;
@@ -41,6 +42,7 @@ void Args::makeItems()
 	items[1]->unlocks.resize(0);
 	items[1]->unlocks = {};
 
+	//Lens of Truth
 	items[2] = new Item;
 	items[2]->name = "Lens of Truth";
 	items[2]->id = 0x0a;
@@ -49,6 +51,7 @@ void Args::makeItems()
 	items[2]->unlocks.resize(0);
 	items[2]->unlocks = {};
 
+	//Ocarina of Time
 	items[3] = new Item;
 	items[3]->name = "Ocarina of Time";
 	items[3]->id = 0x0C;
@@ -57,6 +60,7 @@ void Args::makeItems()
 	items[3]->unlocks.resize(0);
 	items[3]->unlocks = {};
 
+	//Bottle 1
 	items[4] = new Item;
 	items[4]->name = "Empty Bottle";
 	items[4]->id = 0x0F;
@@ -65,6 +69,7 @@ void Args::makeItems()
 	items[4]->unlocks.resize(0);
 	items[4]->unlocks = {};
 
+	//Bottle 2
 	items[5] = new Item;
 	items[5]->name = "Empty Bottle";
 	items[5]->id = 0x0F;
@@ -73,6 +78,7 @@ void Args::makeItems()
 	items[5]->unlocks.resize(0);
 	items[5]->unlocks = {};
 
+	//Bottle 3
 	items[6] = new Item;
 	items[6]->name = "Empty Bottle";
 	items[6]->id = 0x0F;
@@ -81,6 +87,7 @@ void Args::makeItems()
 	items[6]->unlocks.resize(0);
 	items[6]->unlocks = {};
 
+	//Bottle 4
 	items[7] = new Item;
 	items[7]->name = "Empty Bottle";
 	items[7]->id = 0x0F;
@@ -89,6 +96,7 @@ void Args::makeItems()
 	items[7]->unlocks.resize(0);
 	items[7]->unlocks = {};
 
+	//Kokiri Sword
 	items[8] = new Item;
 	items[8]->name = "Kokiri Sword";
 	items[8]->id = 0x27;
@@ -97,6 +105,7 @@ void Args::makeItems()
 	items[8]->unlocks.resize(0);
 	items[8]->unlocks = {};
 
+	//Deku Shield
 	items[9] = new Item;
 	items[9]->name = "Deku Shield";
 	items[9]->id = 0x29;
@@ -105,6 +114,7 @@ void Args::makeItems()
 	items[9]->unlocks.resize(0);
 	items[9]->unlocks = {};
 
+	//Hylian Shield
 	items[10] = new Item;
 	items[10]->name = "Hylian Shield";
 	items[10]->id = 0x2A;
@@ -113,22 +123,25 @@ void Args::makeItems()
 	items[10]->unlocks.resize(0);
 	items[10]->unlocks = {};
 
+	//Bomb Bag (Default)
 	items[11] = new Item;
 	items[11]->name = "Bomb Bag";
 	items[11]->id = 0x32;
 	items[11]->chest_id = 0x0640;
 	items[11]->used = false;
-	items[11]->unlocks.resize(0);
-	items[11]->unlocks = {};
+	items[11]->unlocks.resize(4);
+	items[11]->unlocks = {chests[11], chests[15], chests[14], chests[26]};
 
+	//Golden Scale
 	items[12] = new Item;
 	items[12]->name = "Golden Scale";
 	items[12]->id = 0x38;
 	items[12]->chest_id = 0x0700;
 	items[12]->used = false;
-	items[12]->unlocks.resize(0);
-	items[12]->unlocks = {};
+	items[12]->unlocks.resize(1);
+	items[12]->unlocks = {chests[25]};
 
+	//Giant's Wallet
 	items[13] = new Item;
 	items[13]->name = "Giant Wallet";
 	items[13]->id = 0x46;

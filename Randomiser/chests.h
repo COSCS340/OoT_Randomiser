@@ -136,7 +136,7 @@ void Args::makeChests()
 	chests[13]->available = false;
 	chests[13]->used = false;
 
-	//DC Red Rupee Chest
+	//DC Spike Trap Room
 	chests[14] = new Chest;
 	chests[14]->name = "DC Red Rupee Chest";
 	chests[14]->offset = 0x01f890de;
