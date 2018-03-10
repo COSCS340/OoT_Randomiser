@@ -4,132 +4,138 @@
 #include <cstring>
 #include <string>
 #include <cmath>
-using namespace std;
+#include <cstdint>
+#include <cstddef>
+#include <vector>
 
-int AtoH(char);
-bool ErrorCheck(int, char**);
+static bool ErrorCheck(int, char**);
 
+static uint32_t from_arg(const char *arg) {
+    if ((arg[0] >= '0' && arg[0] <= '9') || (arg[0] >= 'a' && arg[0] <= 'f') || (arg[0] >= 'A' && arg[0] <= 'F')) {
+        char *endptr;
+        errno = 0;
+        unsigned long q = strtoul(arg, &endptr, 16);
+        if (errno || *endptr || q > UINT32_MAX) {
+            throw std::runtime_error("Invalid hex passed as argument");
+        }
+        return std::uint32_t(q);
+    }
+    throw std::runtime_error("Invalid hex passed as argument");
+}
+
+static void real_main(int argc, char **argv);
 int main(int argc, char** argv)
 {
-	unsigned int start = 0, end = 0, size = 0, mapstart = 0, i = 0;
+    try {
+        real_main(argc, argv);
+        return 0;
+    } catch (std::runtime_error &e) {
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
+}
+
+
+void real_main(int argc, char **argv) {
+    std::uint32_t mapstart = 0, i = 0;
 	unsigned char temp = 0;
-	unsigned char* data;
-	int position;
-	string name;
-	ifstream input;
-	ofstream output;
-	ofstream textfile;
+    std::vector<unsigned char> data;
+    std::ifstream input;
+    std::ofstream output;
+    std::ofstream textfile;
 
-	if(ErrorCheck(argc, argv))
-		return(-1);
+    std::cout.exceptions(std::iostream::badbit | std::iostream::failbit | std::iostream::eofbit);
 
-	//Get start and end offsets
-	for(i = 0; i < 8; i++)
-	{
-		start += AtoH(argv[2][i]) * pow(16, 7-i);
-		end += AtoH(argv[3][i]) * pow(16, 7-i);
-	}
+    if(ErrorCheck(argc, argv))
+        return;
+    uint32_t start = from_arg(argv[2]);
+    uint32_t end = from_arg(argv[3]);
 
 	//Write scene offsets to txt file
-	name = argv[1], name += ".txt";
-	textfile.open(name);
-	textfile << argv[1] << ":    " << "0" << hex << start << " - " << end << endl;
+    std::string name{argv[1]};
+    name += ".txt";
+    textfile.exceptions(std::iostream::badbit | std::iostream::failbit | std::iostream::eofbit);
+    textfile.open(name);
+
+    textfile << argv[1] << ":    " << "0" << std::hex << start << " - " << end << std::endl;
 
 	//Get size, finish filename, make room for data
-	size = end-start;
-	data = (unsigned char*)malloc(size);
-	name = argv[1], name += ".zscene";
+    std::uint32_t size = end-start;
+    std::vector<char> buffer(size);
+    name = argv[1];
+    name += ".zscene";
 	i = 0;
-	
+    input.exceptions(std::iostream::badbit | std::iostream::failbit | std::iostream::eofbit);
+
 	//Read then write data to new file
-	input.open("ZOOTDEC.z64", ios::binary);
-	input.seekg(start, ios::beg);
-	input.read(reinterpret_cast<char*>(data), size);
-	output.open(name, ios::binary);
-	output.write(reinterpret_cast<const char*>(data), size);
-	cout << name << " written" << endl;
-	output.close();
-	free(data);
+    input.open("ZOOTDEC.z64", std::ios::binary);
+    input.seekg(start, std::ios::beg);
+    input.read(reinterpret_cast<char*>(data.data()), size);
+    {
+        std::ofstream output(name, std::ios::binary);
+        output.exceptions(std::iostream::badbit | std::iostream::failbit | std::iostream::eofbit);
+        output.write(reinterpret_cast<const char*>(data.data()), size);
+        std::cout << name << " written" << std::endl;
+    }
 
 	//Get the map starting point offset
 	//If a map is inside, start halfway through line 1, if outside, start on line 2
 	if(tolower(argv[4][0]) == 'o')
-		input.seekg(start+16, ios::beg);
+        input.seekg(start+16, std::ios::beg);
 	else
-		input.seekg(start+8, ios::beg);
+        input.seekg(start+8, std::ios::beg);
 
 	//The starting point for map offsets is located 4 bytes after a 04xx with xx being the number of maps for the scene
 	while(temp != 0x04)
 		input.read(reinterpret_cast<char*>(&temp), 1);
 	input.read(reinterpret_cast<char*>(&temp), 1);
-	input.seekg(4, ios::cur);
+    input.seekg(4, std::ios::cur);
 	input.read(reinterpret_cast<char*>(&mapstart), 2);
-	mapstart = htobe16(mapstart);
+    mapstart = be16toh(mapstart);
 	mapstart += start;
 
 	//Get map offsets, make files for each
-	while(i < (int)temp)
+    while(i < temp)
 	{
-		input.seekg(mapstart + (i*8), ios::beg);
-		start = end = 0;
+        input.seekg(mapstart + (i*8), std::ios::beg);
+        std::uint32_t start = 0, end = 0;
 
 		input.read(reinterpret_cast<char*>(&start), 4);
 		input.read(reinterpret_cast<char*>(&end), 4);
-		start = htobe32(start);
-		end = htobe32(end);
+        if (input.bad() || input.eof() || input.fail()) {
+
+        }
+        start = be32toh(start);
+        end = be32toh(end);
 
 		//Write current map offsets to txt file
 		if(i < 10)
-			textfile << argv[1] << "-" << dec << i << ":  " << "0" << hex << start << " - "  << end << endl;
+            textfile << argv[1] << "-" << std::dec << i << ":  " << "0" << std::hex << start << " - "  << end << '\n';
 		else
-			textfile << argv[1] << "-" << dec << i << ": " << "0" << hex << start << " - "  << end << endl;
+            textfile << argv[1] << "-" << std::dec << i << ": " << "0" << std::hex << start << " - "  << end << '\n';
 
 		//Read and write the current map
 		size = end-start;
-		data = (unsigned char*)malloc(size);
-		input.seekg(start, ios::beg);
-		input.read(reinterpret_cast<char*>(data), size);
-		name = argv[1], name += '-', name += to_string(i), name += ".zmap";
-		output.open(name, ios::binary);
-		output.write(reinterpret_cast<const char*>(data), size);
-		cout << name << " written" << endl;
+        input.seekg(start, std::ios::beg);
+        input.read(reinterpret_cast<char*>(data.data()), size);
+        name = argv[1];
+        name += '-';
+        name += std::to_string(i);
+        name += ".zmap";
+        output.open(name, std::ios::binary);
+        output.write(reinterpret_cast<const char*>(data.data()), size);
+        std::cout << name << " written" << '\n';
 		output.close();
-		free(data);
 		i++;
 	}
 
 	input.close();
 	textfile.close();
-
-	return(0);
-}
-
-int AtoH(char a)
-{
-	switch(tolower(a))
-	{
-		case '0': return(0);
-		case '1': return(1);
-		case '2': return(2);
-		case '3': return(3);
-		case '4': return(4);
-		case '5': return(5);
-		case '6': return(6);
-		case '7': return(7);
-		case '8': return(8);
-		case '9': return(9);
-		case 'a': return(10);
-		case 'b': return(11);
-		case 'c': return(12);
-		case 'd': return(13);
-		case 'e': return(14);
-		case 'f': return(15);
-	}
 }
 
 bool ErrorCheck(int argc, char** argv)
 {
-	ifstream input;
+    std::ifstream input;
 
 	if(argc != 5)
 	{
@@ -146,23 +152,23 @@ bool ErrorCheck(int argc, char** argv)
 	if(strlen(argv[2]) != 8)
 	{
 		printf("Error: Starting offset needs to be 4 bytes (8 characters)\n");
-		return(true);
+        return true;
 	}
 
 	if(strlen(argv[3]) != 8)
 	{
 		printf("Error: Ending offset needs to be 4 bytes (8 characters)\n");
-		return(true);
+        return true;
 	}
 
-	input.open("ZOOTDEC.z64", ios::binary);
+    input.open("ZOOTDEC.z64", std::ios::binary);
 	if(input.fail())
 	{
 		printf("Error: ZOOTDEC.z64 not found\n");
 		input.close();
-		return(true);
+        return true;
 	}
 	input.close();
 
-	return(false);
+    return false;
 }

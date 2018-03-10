@@ -22,13 +22,26 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+QMAKE_CXXFLAGS += -std=c++17
 
 SOURCES += \
         GUI/main.cpp \
-        GUI/mainwindow.cpp
+        GUI/mainwindow.cpp \
+    colors/color_driver.cpp \
+    Extractor/extract.cpp \
+    GUI/main.cpp \
+    GUI/mainwindow.cpp \
+    Randomiser/randomizer.cpp
 
 HEADERS += \
-        GUI/mainwindow.h
+        GUI/mainwindow.h \
+    colors/custom_colors.h \
+    GUI/mainwindow.h \
+    Randomiser/chests.h \
+    Randomiser/items.h
 
 FORMS += \
         GUI/mainwindow.ui
+
+DISTFILES += \
+    Temp/locations.txt

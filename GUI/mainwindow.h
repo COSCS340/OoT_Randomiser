@@ -29,13 +29,20 @@ private slots:
 
     void on_seedRNGButton_pressed();
 
+    void on_exitWithoutSaving_pressed();
+
+    void on_selectInputFile_pressed();
+
+    void on_inputFileName_selectionChanged();
+
 private:
     Ui::MainWindow *ui;
-    std::mt19937_64 prng;
-    bool shouldRandomizeColors;
-    bool shouldRandomizeChestContents;
-    bool shouldRandomizeRequirements;
-    std::random_device random_device;
+    std::mt19937_64 m_prng;
+    bool m_shouldRandomizeColors;
+    bool m_shouldRandomizeChestContents;
+    bool m_shouldRandomizeRequirements;
+    std::random_device m_random_device;
+    QString m_fName;
 };
 
 #endif // MAINWINDOW_H

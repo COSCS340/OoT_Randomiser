@@ -3,34 +3,34 @@
 #include <iostream>
 #include <fstream>
 #include <string.h>
+#include <vector>
 #include "custom_colors.h"
-
-using namespace std;
 
 #define GAME_SIZE 67108864
 
 int main( int argc, char** argv) {
 
-	unsigned char *game;
-	unsigned char **game_ptr;
-	game = ( unsigned char* ) malloc( GAME_SIZE );
+    try {
+        std::vector<unsigned char> game(GAME_SIZE);
+        std::ofstream output;
+        {
+            std::ifstream input;
+            input.open(argv[1], std::ios::binary);
+            input.read(reinterpret_cast<char*>(game.data()), GAME_SIZE);
+            if (input.gcount() < GAME_SIZE) {
+                throw std::runtime_error("input file too short");
+            }
+            input.close();
+        }
 
-	ifstream input;
-    ofstream output;
+        custom_colors(game);
 
-	input.open( argv[1], ios::binary );
-	input.read( reinterpret_cast<char*>(game), GAME_SIZE );
-	input.close();
+        output.open("newzoot.z64", std::ios::binary);
+        output.write(reinterpret_cast<const char*>(game.data()), GAME_SIZE);
 
-	game_ptr = &game;
-    
-	custom_colors( game_ptr );
-
-    output.open( "newzoot.z64", ios::binary );
-	output.write( reinterpret_cast<const char*>(game), GAME_SIZE );
-    
-	free(game);
-
-
-	return 0;
+        return 0;
+    } catch (std::runtime_error &e) {
+        std::cerr << e.what() << '\n';
+        return 1;
+    }
 }
