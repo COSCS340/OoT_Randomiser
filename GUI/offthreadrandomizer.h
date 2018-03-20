@@ -10,9 +10,7 @@ class OffThreadRandomizer : public QObject
 {
     Q_OBJECT
 public:
-    void operator()(QString str, quint32 progress) {
-        emit ReportProgress(str, progress);
-    }
+    void operator()(QString str, quint32 progress);
     static QString ExecuteOnFile(MainWindow *target, QString fname, QString ofname, bool randomizeChests, bool randomizeColors);
 
 signals:

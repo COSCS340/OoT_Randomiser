@@ -26,6 +26,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    if (m_future.has_value()) {
+        m_future.value()->future().result();
+    }
     delete ui;
 }
 
@@ -94,8 +97,7 @@ void MainWindow::on_outputFileName_chosen(QString arg) {
 
 void MainWindow::on_run_complete() {
     Q_ASSERT(m_future);
-    std::unique_ptr<QFutureWatcher<QString>> watcher = std::move(m_future.value());
-    on_progress(watcher->future().result(), 100);
+    on_progress(m_future.value()->future().result(), 100);
     m_future.reset();
 }
 

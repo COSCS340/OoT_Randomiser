@@ -9,6 +9,10 @@ OffThreadRandomizer::OffThreadRandomizer(QObject *parent) : QObject(parent)
 
 }
 
+void OffThreadRandomizer::operator()(QString str, quint32 progress) {
+    emit ReportProgress(str, progress);
+}
+
 QString OffThreadRandomizer::ExecuteOnFile(MainWindow *target, QString fname, QString ofname, bool randomizeChests, bool randomizeColors) {
     OffThreadRandomizer randomizer;
     connect(&randomizer, &OffThreadRandomizer::ReportProgress, target, &MainWindow::on_progress, Qt::QueuedConnection);
