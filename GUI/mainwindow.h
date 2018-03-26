@@ -7,23 +7,12 @@
 #include <random>
 #include <memory>
 #include <functional>
-#if __cplusplus >= 201703L
-#include <optional>
-#else
-#include <experimental/optional>
-#endif
 namespace Ui {
 class MainWindow;
 }
 
 namespace OoT_Randomizer {
 
-template <typename T>
-#if __cplusplus >= 201703L
-using optional = std::optional<T>;
-#else
-using optional = std::experimental::optional<T>;
-#endif
 namespace Ui {
 class OffThreadRandomizer;
 class MainWindow : public QMainWindow
@@ -72,7 +61,7 @@ private:
     QString m_fName, m_ofName;
     QFileDialog *m_dialog;
     std::unique_ptr<OffThreadRandomizer> m_randomizer;
-    optional<std::unique_ptr<QFutureWatcher<QString>>> m_future;
+    std::unique_ptr<QFutureWatcher<QString> > m_future;
 };
 
 }

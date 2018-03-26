@@ -26,8 +26,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    if (m_future.has_value()) {
-        m_future.value()->future().result();
+    if (m_future) {
+        m_future->future().result();
     }
     delete ui;
 }
@@ -97,8 +97,8 @@ void MainWindow::on_outputFileName_chosen(QString arg) {
 
 void MainWindow::on_run_complete() {
     Q_ASSERT(m_future);
-    on_progress(m_future.value()->future().result(), 100);
-    m_future.reset();
+    on_progress(m_future->future().result(), 100);
+    m_future = {};
 }
 
 }
@@ -118,10 +118,9 @@ void OoT_Randomizer::Ui::MainWindow::on_selectOutputFile_clicked(bool checked)
 
 void OoT_Randomizer::Ui::MainWindow::on_runButton_released()
 {
-    qWarning("clicked main button\n");
-    if (true and !m_future.has_value()) {
-        m_future = std::make_unique<QFutureWatcher<QString>>();
-        m_future.value()->setFuture(QtConcurrent::run(&OffThreadRandomizer::ExecuteOnFile, this, std::move(m_fName), std::move(m_ofName), m_shouldRandomizeChestContents, m_shouldRandomizeColors));
-        connect(m_future.value().get(), &QFutureWatcher<QString>::finished, this, &MainWindow::on_run_complete);
+    if (!m_future) {
+        m_future.reset(new QFutureWatcher<QString>());
+        m_future->setFuture(QtConcurrent::run(&OffThreadRandomizer::ExecuteOnFile, this, std::move(m_fName), std::move(m_ofName), m_shouldRandomizeChestContents, m_shouldRandomizeColors));
+        connect(m_future.get(), &QFutureWatcher<QString>::finished, this, &MainWindow::on_run_complete);
     }
 }
