@@ -1,12 +1,12 @@
 # LoZ: OoT Randomizer Status Report
 
-Team_Z (Team 7)
+### Team_Z (Team 7)
 
-Chris Muncey, Isaac Stone, Demi Obenour, Cole Flemmons
+### Chris Muncey, Isaac Stone, Demi Obenour, Cole Flemmons
 
-Introduction
+## Introduction
 
-What We Are Working On:
+## What We Are Working On:
 
 Our team is creating a program with a graphical user interface that will modify an existing Nintendo 
 64 ROM file. With a few settings selected and the press of a button, the user will have a brand new ROM 
@@ -16,7 +16,7 @@ and beatable. The user interface will also offer a selection of main character o
 further enhance the gaming experience. Other modifications will be added to make the game more streamlined, such 
 as removing various cut-scenes and elimination some of the more tedious gameplay.
 
-Accomplishments:
+## Accomplishments:
 
 Thus far, we have completed the working randomizer for the first three levels of the game (This is intentional, as
 our project is a demo version). We also have a simple GUI interface up and running, though it does not interact with
