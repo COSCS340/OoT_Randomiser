@@ -6,8 +6,6 @@
 
 ## Introduction
 
-## What We Are Working On:
-
 Our team is creating a program with a graphical user interface that will modify an existing Nintendo 
 64 ROM file. With a few settings selected and the press of a button, the user will have a brand new ROM 
 file prepared for them that will be compatible with most Nintendo 64 emulators. The randomizer program will 
