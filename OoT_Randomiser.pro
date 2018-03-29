@@ -31,12 +31,13 @@ CONFIG(linux*|*BSD*) {
   QMAKE_CXXFLAGS += -fstack-protector-strong
 }
 QMAKE_CXX = g++
-
-QMAKE_CXXFLAGS += -std=c++17 -g3
+CONFIG(mac) {
+QMAKE_CXX = clang++
+}
+QMAKE_CXXFLAGS += -std=c++17 -g3 -v
 
 SOURCES += \
     colors/color_driver.cpp \
-    Extractor/extract.cpp \
     GUI/main.cpp \
     GUI/mainwindow.cpp \
     GUI/offthreadrandomizer.cpp \

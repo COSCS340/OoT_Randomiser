@@ -22,7 +22,7 @@ struct Chest
     unsigned short flags;   /*Chest type and Chest flag*/
     bool available;         /*If the chest is available to place items in*/
     bool used;              /*If the chest has been used already*/
-    bool operator<(const Chest& c) {return(this->available > c.available);}
+    constexpr bool operator<(const Chest& c) const {return(this->available > c.available);}
 };
 
 struct Item
@@ -32,8 +32,8 @@ struct Item
     unsigned char id;               /*Item number*/
     unsigned short chest_id;        /*Value to override chest data*/
     std::vector<Chest*> unlocks;    /*Chests that this item gives access to*/
-    bool operator<(const Item&) const;
-    bool operator==(const Item&) const;
+    constexpr bool operator<(const Item&) const;
+    constexpr bool operator==(const Item&) const;
 };
 
 struct Args

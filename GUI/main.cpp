@@ -15,8 +15,11 @@ int main(int argc, char *argv[])
             return OoT_Randomizer::CustomColors::real_main(argc - 1, argv + 1);
         else if (!strcmp(argv[1], "gui"))
             ;
-        else if (!strcmp(argv[1], "extract"))
+#if 0
+        else if (!strcmp(argv[1], "extract")) {
             return OoT_Randomizer::Extract::real_main(argc - 1, argv + 1);
+        }
+#endif
         else {
             std::cerr << R"(This is a randomizer for the Zelda Ocarina of Time game ROM.
 

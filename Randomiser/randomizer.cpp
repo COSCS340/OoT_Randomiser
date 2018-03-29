@@ -29,7 +29,7 @@ Args::Args() : num_progression(0), items{{
 {false, "Bomb Bag", 0x32, 0x0640, {}},
 {false, "Golden Scale", 0x38, 0x0700, {}},
 {false, "Giant Wallet", 0x46, 0x08C0, {}},
-}}, combo{items[0], items[1], items[2]}, chests{{
+}}, combo{{items[0], items[1], items[2]}}, chests{{
 {"Mido's House 3", 0x02f7b0ba, 0x5903, true, false},
 {"Mido's House 2", 0x02f7b0aa, 0x5982, true, false},
 {"Mido's House 1", 0x02f7b09a, 0x59A1, true, false},
@@ -72,7 +72,7 @@ void Args::sortItems()
     std::sort(items.begin(), items.end());
 }
 
-bool Item::operator<(const Item& i) const
+constexpr bool Item::operator<(const Item& i) const
 {
     if(used < i.used)
         return true;
@@ -82,7 +82,7 @@ bool Item::operator<(const Item& i) const
         return unlocks.size() > i.unlocks.size();
 }
 
-bool Item::operator==(const Item& i) const
+constexpr bool Item::operator==(const Item& i) const
 {
     return id == i.id;
 }
@@ -142,7 +142,7 @@ int real_main(int argc, char **argv) {
   auto data = std::vector<uint8_t>(GAME_SIZE);
   QFile file(argv[1]);
   file.open(QIODevice::ReadOnly);
-  static_assert(GAME_SIZE < INTPTR_MAX);
+  static_assert(GAME_SIZE < INTPTR_MAX, "");
   file.read(reinterpret_cast<char*>(data.data()), qint64(data.size()));
 
   randomize_file(data);
