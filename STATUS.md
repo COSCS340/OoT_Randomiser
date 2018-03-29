@@ -87,7 +87,7 @@ The previous sprints have been informative with regard to group performance as a
 of group meetings. It has come to our attention that all of these elements are required for a productive team environment. In the
 weeks approaching the final presentation, extra effort will be directed toward documenting our experience of developing the project
 and making sure all team members know what is expected of them. Almost everything went smoothly, apart from the GUI. While it did
-work, it was hard for the rest of the team to compile it, making communication harder.
+work, it was hard for the rest of the team to compile it, making communication harder.  This was due to the use of a complex GUI toolking (Qt).
 
 ## Items to be Included in Final Report:
 
