@@ -17,8 +17,7 @@ as removing various cut-scenes and elimination some of the more tedious gameplay
 ## Accomplishments:
 
 Thus far, we have completed the working randomizer for the first three levels of the game (This is intentional, as
-our project is a demo version). We also have a simple GUI interface up and running, though it does not interact with
-the randomizer or the color changer yet. 
+our project is a demo version). We also have a simple GUI interface up and running, which is able to run the randomizer and the color changer.
 
 ## Customer Value:
 
