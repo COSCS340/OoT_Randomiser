@@ -89,16 +89,16 @@ void MainWindow::on_progress(QString str, int value) {
 }
 
 
-void MainWindow::on_outputFileName_chosen(QString arg) {
+void MainWindow::onOutputfilenameChosen(QString arg) {
     ui->outputFileName->setText(m_ofName = arg);
     ui->selectOutputFile->setEnabled(true);
     m_dialog->deleteLater();
 }
 
-void MainWindow::on_run_complete() {
+void MainWindow::onRunComplete() {
     Q_ASSERT(m_future);
     on_progress(m_future->future().result(), 100);
-    m_future = {};
+    m_future.reset();
 }
 
 }
@@ -112,7 +112,7 @@ void OoT_Randomizer::Ui::MainWindow::on_selectOutputFile_clicked(bool checked)
         m_dialog->setFileMode(QFileDialog::FileMode::AnyFile);
         m_dialog->setAcceptMode(QFileDialog::AcceptMode::AcceptSave);
         m_dialog->show();
-        connect(m_dialog, &QFileDialog::fileSelected, this, &MainWindow::on_outputFileName_chosen);
+        connect(m_dialog, &QFileDialog::fileSelected, this, &MainWindow::onOutputfilenameChosen);
     }
 }
 
@@ -120,7 +120,9 @@ void OoT_Randomizer::Ui::MainWindow::on_runButton_released()
 {
     if (!m_future) {
         m_future.reset(new QFutureWatcher<QString>());
-        m_future->setFuture(QtConcurrent::run(&OffThreadRandomizer::ExecuteOnFile, this, std::move(m_fName), std::move(m_ofName), m_shouldRandomizeChestContents, m_shouldRandomizeColors));
-        connect(m_future.get(), &QFutureWatcher<QString>::finished, this, &MainWindow::on_run_complete);
+        auto randomizer = std::make_shared<OffThreadRandomizer>();
+        connect(randomizer.get(), &OffThreadRandomizer::ReportProgress, this, &MainWindow::on_progress, Qt::QueuedConnection);
+        m_future->setFuture(QtConcurrent::run(&OffThreadRandomizer::ExecuteOnFile, randomizer, std::move(m_fName), std::move(m_ofName), m_shouldRandomizeChestContents, m_shouldRandomizeColors));
+        connect(m_future.get(), &QFutureWatcher<QString>::finished, this, &MainWindow::onRunComplete);
     }
 }

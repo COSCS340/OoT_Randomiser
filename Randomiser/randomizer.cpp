@@ -142,7 +142,7 @@ int real_main(int argc, char **argv) {
   auto data = std::vector<uint8_t>(GAME_SIZE);
   QFile file(argv[1]);
   file.open(QIODevice::ReadOnly);
-  static_assert(GAME_SIZE < INTPTR_MAX, "");
+  static_assert(GAME_SIZE < INTPTR_MAX, "Game size must not exceed INTPTR_MAX");
   file.read(reinterpret_cast<char*>(data.data()), qint64(data.size()));
 
   randomize_file(data);

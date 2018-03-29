@@ -43,9 +43,9 @@ private slots:
 
     void on_inputFileName_selectionChanged();
 
-    void on_run_complete();
+    void onRunComplete();
 
-    void on_outputFileName_chosen(QString str);
+    void onOutputfilenameChosen(QString str);
 
     void on_selectOutputFile_clicked(bool checked);
 
