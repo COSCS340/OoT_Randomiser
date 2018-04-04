@@ -77,11 +77,6 @@ void MainWindow::on_selectInputFile_pressed()
     ui->inputFileName->setText(m_fName);
 }
 
-void MainWindow::on_inputFileName_selectionChanged()
-{
-    on_selectInputFile_pressed();
-}
-
 void MainWindow::on_progress(QString str, int value) {
     Q_ASSERT(m_future);
     ui->statusLabel->setText(str);

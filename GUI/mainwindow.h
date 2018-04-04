@@ -41,8 +41,6 @@ private slots:
 
     void on_selectInputFile_pressed();
 
-    void on_inputFileName_selectionChanged();
-
     void onRunComplete();
 
     void onOutputfilenameChosen(QString str);
