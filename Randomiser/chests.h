@@ -70,7 +70,7 @@ void Args::makeChests()
 	//Deku Tree Map Chest
 	chest = new Chest;
 	chest->name = "DT Map Chest";
-	chest->offset = 0x024a7138;
+	chest->offset = 0x024a7146;
 	chest->flags = 0x0823;
 	chest->available = true;
 	chest->used = false;
@@ -79,7 +79,7 @@ void Args::makeChests()
 	//Deku Tree Slingshot Chest
 	chest = new Chest;
 	chest->name = "DT Slingshot Chest";
-	chest->offset = 0x024c20b8;
+	chest->offset = 0x024c20c6;
 	chest->flags = 0x00a1;
 	chest->available = true;
 	chest->used = false;
@@ -88,7 +88,7 @@ void Args::makeChests()
 	//Deku Tree Heart Chest (Slingshot room)
 	chest = new Chest;
 	chest->name = "DT S Heart Chest";
-	chest->offset = 0x024c20c8;
+	chest->offset = 0x024c20d6;
 	chest->flags = 0x5905;
 	chest->available = true;
 	chest->used = false;
@@ -97,7 +97,7 @@ void Args::makeChests()
 	//Deku Tree Basement Chest
 	chest = new Chest;
 	chest->name = "DT Basement Chest";
-	chest->offset = 0x024c8158;
+	chest->offset = 0x024c8166;
 	chest->flags = 0x5904;
 	chest->available = true;
 	chest->used = false;
@@ -106,7 +106,7 @@ void Args::makeChests()
 	//Deku Tree Compass Chest
 	chest = new Chest;
 	chest->name = "DT Compass Chest";
-	chest->offset = 0x025040c8;
+	chest->offset = 0x025040d6;
 	chest->flags = 0x0802;
 	chest->available = true;
 	chest->used = false;
@@ -115,7 +115,7 @@ void Args::makeChests()
 	//Deku Tree Heart Chest (Compass room)
 	chest = new Chest;
 	chest->name = "DT C Heart Chest";
-	chest->offset = 0x025040d8;
+	chest->offset = 0x025040e6;
 	chest->flags = 0x5906;
 	chest->available = true;
 	chest->used = false;
