@@ -2,28 +2,34 @@
 #include <fstream>
 #include <ctime>
 #include <cstdint>
+#include <set>
 using namespace std;
 
 #define GAME_SIZE 67108864
 #define DEBUG true
+#define NUM_ITEMS 29
+#define NUM_CHESTS 29
+#define NUM_COMBOS 8
 
-bool ErrorCheck(int, char**);
+void ErrorCheck(int, char**);
 
 struct Args
 {
-	struct Item** items;
-	struct Item** combo;
+	struct Item* items[NUM_ITEMS];
 	int num_progression;
 	void makeItems();
 	void sortItems();
 	void makeCombo();
 
-	struct Chest** chests;
+	struct Chest* chests[NUM_CHESTS];
+	struct Chest* combos[NUM_COMBOS];	
 	int chests_available;
 	void makeChests();
 	void sortChests();
 
+	set<uint8_t> combo;
 	void randomise();
+	void checkCombo(uint8_t);
 };
 
 #include "chests.h"
@@ -40,14 +46,15 @@ int main(int argc, char** argv)
 	uint32_t seed;
 	int32_t i;
 
-	if(ErrorCheck(argc, argv))
-		return(-1);
+	ErrorCheck(argc, argv);
 
 	//Get and set the seed
 	srand(time(NULL));
 	(argc == 3) ? seed = atoi(argv[2]) : seed = rand();
 	srand(seed);
 	
+	printf("SEED: %d\n", seed);
+
 	//Fill items and chests arrays
 	arg.makeChests();
 	arg.makeItems();
@@ -56,10 +63,12 @@ int main(int argc, char** argv)
 	for(i = 0; i < NUM_CHESTS; i++)
 		if(arg.chests[i]->available)
 			arg.chests_available++;
+	printf("Chests available: %d\n", arg.chests_available);
 	
 	for(i = 0; i < NUM_ITEMS; i++)
 		if(arg.items[i]->unlocks.size() != 0)
 			arg.num_progression++;
+	printf("Num Progression: %d\n", arg.num_progression);
 
 	//Read the data from the source ROM
 	data = new uint8_t[GAME_SIZE];
@@ -73,13 +82,25 @@ int main(int argc, char** argv)
 	arg.sortItems();
 	arg.randomise();
 
+	//Optionally print out chest and item data
+	if(DEBUG)
+	{
+		printf("Chests:\n");
+		for(i = 0; i < NUM_CHESTS; i++)
+			printf("Name: %s - Flags: 0x%04x - Used: %d - Available: %d\n", arg.chests[i]->name.c_str(), arg.chests[i]->flags, arg.chests[i]->used, arg.chests[i]->available);
+
+		printf("Items:\n");
+		for(i = 0; i < NUM_ITEMS; i++)
+			printf("Name: %s - Used: %d\n", arg.items[i]->name.c_str(), arg.items[i]->used);
+	}
+
 	//Edit the data with new chest values
 	for(i = 0; i < NUM_CHESTS; i++)
 	{
 		temp = arg.chests[i]->flags >> 8;
-		data[arg.chests[i]->offset] = temp;
+		*(data + (arg.chests[i]->offset)) = temp;
 		temp = arg.chests[i]->flags;
-		data[arg.chests[i]->offset+1] = temp;
+		*(data + (arg.chests[i]->offset+1))  = temp;
 	}
 
 	//Write the edited data to a new file
@@ -90,22 +111,20 @@ int main(int argc, char** argv)
 	delete[] data;
 
 	//Optionally print out chest and item data
-	if(DEBUG)
+	if(0)
 	{
 		printf("Chests:\n");
 		for(i = 0; i < NUM_CHESTS; i++)
-			printf("Offset: 0x%08x - Flags: 0x%04x - Used: %i\n", arg.chests[i]->offset, arg.chests[i]->flags, arg.chests[i]->used);
+			printf("Name: %s - Flags: %d - Used: %d\n", arg.chests[i]->name.c_str(), arg.chests[i]->flags ,arg.chests[i]->used);
 
 		printf("Items:\n");
 		for(i = 0; i < NUM_ITEMS; i++)
-			printf("Id: %02x, Chest_id: %04x\n", arg.items[i]->id, arg.items[i]->chest_id);
+			printf("Name: %s - Used: %d\n", arg.items[i]->name.c_str(), arg.items[i]->used);
 	}
 
 	//Free up memory
 	for(i = 0; i < NUM_CHESTS; i++)
 		delete arg.chests[i];
-	delete[] arg.chests;
-	delete[] arg.items;
 	
 	return(0);
 }
@@ -113,7 +132,7 @@ int main(int argc, char** argv)
 void Args::randomise()
 {
 	int i = 0;
-	int rChest, rItem;
+	int j, rChest, rItem;
 
 	while(chests_available > 0)
 	{
@@ -132,6 +151,7 @@ void Args::randomise()
 		chests[rChest]->flags = chests[rChest]->flags & 0xF01F;
 		chests[rChest]->flags = chests[rChest]->flags | items[rItem]->chest_id;
 		chests[rChest]->available = false;
+		combo.insert(items[rItem]->id);
 		chests[rChest]->used = true;
 		items[rItem]->used = true;
 		chests_available--;
@@ -141,19 +161,21 @@ void Args::randomise()
 		{
 			num_progression--;
 
-			for(i = 0; i < items[rItem]->unlocks.size(); i++)
+			for(j = 0; j < items[rItem]->unlocks.size(); j++)
 			{
-				if(items[rItem]->unlocks[i]->used)
+				if(items[rItem]->unlocks[j]->used)
 					continue;
-				if(!items[rItem]->unlocks[i]->available)
+				if(!items[rItem]->unlocks[j]->available)
 				{
-					items[rItem]->unlocks[i]->available = true;
+					items[rItem]->unlocks[j]->available = true;
 					chests_available++;
 				}
 			}
 		}
 
 		printf("%s in %s\n", items[rItem]->name.c_str(), chests[rChest]->name.c_str());
+		checkCombo(items[rItem]->id);
+
 		//Sort the chests and items again
 		sortChests();
 		sortItems();
@@ -161,6 +183,266 @@ void Args::randomise()
 	}
 }
 
+/*
+	Function: checkCombo
+	Purpose: Checks for item pairs that can be used to unlock chests
+	Paramaters: Item A's id
+	Returns: N/A
+*/
+void Args::checkCombo(uint8_t id)
+{
+	//Ocarina of Time
+	if(id == 0x0C)
+	{
+		//Bombs
+		if(combo.find(0x32) != combo.end())
+		{
+			//Zora's Domain Chest
+			if(!combos[6]->used and !combos[6]->available)
+			{
+				combos[6]->available = true;
+				chests_available++;
+			}
+		}
+
+		//Din's Fire
+		if(combo.find(0x5C) != combo.end())
+		{
+			//Royal Family Tomb Chest
+			if(!combos[5]->used and !combos[5]->available)
+			{
+				combos[5]->available = true;
+				chests_available++;
+			}
+		}
+
+		return;
+	}
+
+	//Din's Fire
+	if(id == 0x5C)
+	{
+		//Ocarina of Time
+		if(combo.find(0x0C) != combo.end())
+		{
+			//Royal Family Tomb Chest
+			if(!combos[5]->used and !combos[5]->available)
+			{
+				combos[5]->available = true;
+				chests_available++;
+			}
+		}
+	}
+
+	//Bombs
+	if(id == 0x32)
+	{
+		//Slingshot
+		if(combo.find(0x05) != combo.end())
+		{
+			//DC small chest (bridge)
+			if(!combos[0]->used and !combos[0]->available)
+			{
+				combos[0]->available = true;
+				chests_available++;
+			}
+
+			//DC Bomb bag chest
+			if(!combos[1]->used and !combos[1]->available)
+			{
+				combos[1]->available = true;
+				chests_available++;
+			}
+
+			//DC small chest (boss room)
+			if(!combos[7]->used and !combos[7]->available)
+			{
+				combos[7]->available = true;
+				chests_available++;
+			}
+		}
+
+		//Ocarina of Time
+		if(combo.find(0x0C) != combo.end())
+		{
+			//Zora's Domain Chest
+			if(!combos[6]->used and !combos[6]->available)
+			{
+				combos[6]->available = true;
+				chests_available++;
+			}
+		}
+
+		//Bottle
+		if(combo.find(0x0F) != combo.end())
+		{
+			//Zora's Domain Chest
+			if(!combos[6]->used and !combos[6]->available)
+			{
+				combos[6]->available = true;
+				chests_available++;
+			}
+		}
+
+		return;
+	}
+
+	//Goron Bracelet
+	if(id == 0x54)
+	{
+		//Slingshot
+		if(combo.find(0x05) != combo.end())
+		{
+			//DC Bomb bag chest
+			if(!combos[1]->used and !combos[1]->available)
+			{
+				combos[1]->available = true;
+				chests_available++;
+			}
+		}
+
+		return;
+	}
+
+	//Slingshot
+	if(id == 0x05)
+	{
+		//Goron Bracelet
+		if(combo.find(0x54) != combo.end())
+		{
+			//DC Bomb bag chest
+			if(!combos[1]->used and !combos[1]->available)
+			{
+				combos[1]->available = true;
+				chests_available++;
+			}
+		}
+
+		//Bombs
+		if(combo.find(0x32) != combo.end())
+		{
+			//DC small chest (bridge)
+			if(!combos[0]->used and !combos[0]->available)
+			{
+				combos[0]->available = true;
+				chests_available++;
+			}
+
+			//DC Bomb bag chest
+			if(!combos[1]->used and !combos[1]->available)
+			{
+				combos[1]->available = true;
+				chests_available++;
+			}
+
+			//DC small chest (boss room)
+			if(!combos[7]->used and !combos[7]->available)
+			{
+				combos[7]->available = true;
+				chests_available++;
+			}
+		}
+
+		//Bottle
+		if(combo.find(0x0F) != combo.end())
+		{
+			//JJ Boomerang Chest 
+			if(!combos[4]->used and !combos[4]->available)
+			{
+				combos[4]->available = true;
+				chests_available++;
+			}
+		}
+
+		return;
+	}
+
+	//Boomerang
+	if(id == 0x06)
+	{
+		//Bottle
+		if(combo.find(0x0F) != combo.end())
+		{
+			//JJ Compass Chest
+			if(!combos[2]->used and !combos[2]->available)
+			{
+				combos[2]->available = true;
+				chests_available++;
+			}
+
+			//JJ Map Chest
+			if(!combos[3]->used and !combos[3]->available)
+			{
+				combos[3]->available = true;
+				chests_available++;
+			}
+
+			//JJ Boomerang Chest
+			if(!combos[4]->used and !combos[4]->available)
+			{
+				combos[4]->available = true;
+				chests_available++;
+			}
+		}
+
+		return;
+	}
+
+	//Bottle
+	if(id == 0x0F)
+	{
+		//Boomerang
+		if(combo.find(0x06) != combo.end())
+		{
+			//JJ Compass Chest
+			if(!combos[2]->used and !combos[2]->available)
+			{
+				combos[2]->available = true;
+				chests_available++;
+			}
+
+			//JJ Map Chest
+			if(!combos[3]->used and !combos[3]->available)
+			{
+				combos[3]->available = true;
+				chests_available++;
+			}
+
+			//JJ Boomerang Chest
+			if(!combos[4]->used and !combos[4]->available)
+			{
+				combos[4]->available = true;
+				chests_available++;
+			}
+		}
+
+		//Bombs
+		if(combo.find(0x32) != combo.end())
+		{
+			//JJ Boomerang Chest 
+			if(!combos[4]->used and !combos[4]->available)
+			{
+				combos[4]->available = true;
+				chests_available++;
+			}
+		}
+
+		//Slingshot
+		if(combo.find(0x05) != combo.end())
+		{
+			//JJ Boomerang Chest 
+			if(!combos[4]->used and !combos[4]->available)
+			{
+				combos[4]->available = true;
+				chests_available++;
+			}
+		}
+
+		return;
+	}	
+}
+
+/*
 void actorSetup(uint8_t* data)
 {
 	//Move Mido (X, Y, Z)
@@ -181,15 +463,22 @@ void actorSetup(uint8_t* data)
 	//Swap Silver Gauntlets with Green Rupee
 	//Unimplemented, waiting to figure out progressive upgrades
 }
+*/
 
-bool ErrorCheck(int argc, char** argv)
+/*
+	Function: ErrorCheck
+	Purpose: All of the error checking in one function to make it pretty
+	Paramaters: Argc and Argv
+	Returns: N/A
+*/
+void ErrorCheck(int argc, char** argv)
 {
 	FILE* input;
 
 	if(argc < 2 or argc > 3)
 	{
-		fprintf(stderr, "Usage: Randomise [File name] [Seed (Optional)]\n");
-		return(true);
+		fprintf(stderr, "Usage: Randomise file_name [Seed]\n");
+		exit(1);
 	}
 
 	input = fopen(argv[1], "rb");
@@ -197,8 +486,6 @@ bool ErrorCheck(int argc, char** argv)
 	{
 		perror(argv[1]);
 		fclose(input);
-		return(true);
+		exit(1);
 	}
-
-	return(false);
 }
