@@ -171,7 +171,7 @@ void Args::makeChests()
 	//JJ Compass Chest
 	chest = new Chest;
 	chest->name = "JJ Compass Chest";
-	chest->offset = 0x02796000;
+	chest->offset = 0x0279608a;
 	chest->flags = 0xb804;
 	chest->available = false;
 	chest->used = false;
@@ -181,7 +181,7 @@ void Args::makeChests()
 	//JJ Map Chest
 	chest = new Chest;
 	chest->name = "JJ Map Chest";
-	chest->offset = 0x0278000;
+	chest->offset = 0x0278e08a;
 	chest->flags = 0x1822;
 	chest->available = false;
 	chest->used = false;
@@ -191,14 +191,14 @@ void Args::makeChests()
 	//JJ Boomerang Chest
 	chest = new Chest;
 	chest->name = "JJ Bomerang Chest";
-	chest->offset = 0x0278a000;
+	chest->offset = 0x0278a0ba;
 	chest->flags = 0x10c1;
 	chest->available = false;
 	chest->used = false;
 	chests[18] = chest;
 	combos[4] = chest;
 
-	//Fairy Fountian Grave
+	//Fairy Fountain Grave
 	chest = new Chest;
 	chest->name = "Fairy Fountain Grave";
 	chest->offset = 0x0328b096;
@@ -255,7 +255,7 @@ void Args::makeChests()
 
 	//Zora's Domain Room PoH Chest
 	chest = new Chest;
-	chest->name = "Zora's Domin PoH Chest";
+	chest->name = "Zora's Domain PoH Chest";
 	chest->offset = 0x02103166;
 	chest->flags = 0xb7c0;
 	chest->available = false;
