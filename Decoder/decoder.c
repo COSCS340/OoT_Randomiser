@@ -132,13 +132,13 @@ void loadROM(char* name)
 {
 	uint32_t size;
 	FILE* romFile;
-	
+
 	//Open file, make sure it exists
 	romFile = fopen(name, "rb");
 	perror(name);
 	if(romFile == NULL)
 		exit(1);
-	
+
 	//Find size of file
 	fseek(romFile, 0, SEEK_END);
 	size = ftell(romFile);
@@ -199,7 +199,7 @@ void setOffsets(uint32_t i, Offsets offsets)
 	Paramaters: Source array, Destination array, Size of decompressed data
 	Returns: N/A
 */
-void decode(uint8_t* source, uint8_t* decomp, int32_t decompSize)
+void decode(uint8_t* source, size_t compressed_size, uint8_t* decomp, size_t decompSize)
 {
 	uint32_t srcPlace = 0, dstPlace = 0;
 	uint32_t i, dist, copyPlace, numBytes;
@@ -212,6 +212,8 @@ void decode(uint8_t* source, uint8_t* decomp, int32_t decompSize)
 		//If there are no more bits to test, get a new byte
 		if(!bitCount)
 		{
+			if (srcPlace >= compressed_size) {
+				return false;
 			codeByte = source[srcPlace++];
 			bitCount = 8;
 		}
@@ -221,6 +223,7 @@ void decode(uint8_t* source, uint8_t* decomp, int32_t decompSize)
 		if(codeByte & 0x80)
 		{
 			decomp[dstPlace++] = source[srcPlace++];
+			continue;
 		}
 		else
 		{

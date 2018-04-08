@@ -4,17 +4,17 @@
 
 #include <Extractor/extract.hpp>
 #include <colors/custom_colors.h>
+#include <Randomiser/chests.h>
 #include <Randomiser/items.h>
 
 int main(int argc, char *argv[])
 {
-    if (argc >= 2) try {
+    if (argc >= 2 && strcmp(argv[1], "gui")) try {
+        QCoreApplication app(argc, argv);
         if (!strcmp(argv[1], "randomize"))
             return OoT_Randomizer::Randomizer::real_main(argc - 1, argv + 1);
         else if (!strcmp(argv[1], "randomize-colors"))
             return OoT_Randomizer::CustomColors::real_main(argc - 1, argv + 1);
-        else if (!strcmp(argv[1], "gui"))
-            ;
 #if 0
         else if (!strcmp(argv[1], "extract")) {
             return OoT_Randomizer::Extract::real_main(argc - 1, argv + 1);

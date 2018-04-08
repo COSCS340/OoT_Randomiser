@@ -30,19 +30,22 @@ QMAKE_CXXFLAGS_RELEASE += _FORTIFY_SOURCE=2
 CONFIG(linux*|*BSD*) {
   QMAKE_CXXFLAGS += -fstack-protector-strong
 }
-QMAKE_CXX = g++
+CONFIG(!windows) {
+QMAKE_CXX = g++ -fsantize=address -fsanitize=undefined
 CONFIG(mac) {
-QMAKE_CXX = clang++
+QMAKE_CXX = clang++ -fsanitize=undefined -fsanitize-trap-on-error
 }
 QMAKE_CXXFLAGS += -std=c++17 -g3 -v
-
+}
 SOURCES += \
     colors/color_driver.cpp \
+    Common/game.cpp \
     GUI/main.cpp \
     GUI/mainwindow.cpp \
     GUI/offthreadrandomizer.cpp \
-    Randomiser/randomizer.cpp \
-    Common/game.cpp
+    Randomiser/color_driver.cpp \
+    Randomiser/main.cpp \
+    Randomiser/randomizer.cpp
 
 HEADERS += \
     colors/custom_colors.h \
@@ -50,6 +53,9 @@ HEADERS += \
     Extractor/extract.hpp \
     GUI/mainwindow.h \
     GUI/offthreadrandomizer.h \
+    Randomiser/args.h \
+    Randomiser/chests.h \
+    Randomiser/custom_colors.h \
     Randomiser/items.h
 
 FORMS += \

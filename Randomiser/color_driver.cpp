@@ -5,12 +5,10 @@
 #include <string.h>
 #include "custom_colors.h"
 
-using namespace std;
-
 #define GAME_SIZE 67108864
+#if 0
 
 int main( int argc, char** argv) {
-
 	unsigned char *game;
 	unsigned char **game_ptr;
 	game = ( unsigned char* ) malloc( GAME_SIZE );
@@ -34,3 +32,4 @@ int main( int argc, char** argv) {
 
 	return 0;
 }
+#endif

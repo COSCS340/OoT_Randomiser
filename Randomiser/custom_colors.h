@@ -1,7 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
+#include <vector>
+#include <assert.h>
+#include <QtGlobal>
+namespace OoT_Randomizer {
 
+namespace Randomizer {
 class Gear {
 public:
   std::string name;
@@ -51,7 +56,7 @@ public:
   unsigned int boss_addr;
 };
 
-Navi* make_navi() {
+inline Navi* make_navi() {
 
   Navi *navi = new Navi;
   
@@ -94,10 +99,9 @@ Navi* make_navi() {
   return navi;
 }
 
-Gear* make_color_list() {
+inline Gear* make_color_list() {
 
-  Gear *gear_list;
-  gear_list = ( Gear* ) malloc( sizeof( Gear ) * 5 );
+  Gear *gear_list = new Gear[5];
 
   // Kokiri Tunic
   gear_list[0].offset = 0xb6da38;
@@ -133,60 +137,79 @@ Gear* make_color_list() {
 }
 
 // create lists and modify game data
-void custom_colors( unsigned char** game_ptr ) {
+inline void custom_colors( std::vector<uint8_t> &game_ptr ) {
 
   Gear *list;
   Navi *navi;
   int i;
 
   unsigned char *game;
-  game = *game_ptr;
+  game = game_ptr.data();
 
   list = make_color_list();
   navi = make_navi();
 
   for ( i = 0; i < 5; i++ ) {
+    if (list[i].offset - 2 >= game_ptr.size()) {
+      qFatal("list[i]->offset out of bounds");
+    }
 	game[ list[i].offset ] = list[i].R; 
     game[ list[i].offset+1 ] = list[i].G; 
     game[ list[i].offset+2 ] = list[i].B; 
   }
 
+  if (navi->nor_addr >= game_ptr.size() - 3) {
+      qFatal("navi->nor_addr out of bounds: %zu", std::size_t(navi->nor_addr));
+  }
   game[ navi->nor_addr   ] = navi->normal_R;
   game[ navi->nor_addr+1 ] = navi->normal_G;
   game[ navi->nor_addr+2 ] = navi->normal_B;
   game[ navi->nor_addr+3 ] = navi->normal_a;
   
+  if (navi->npc_addr >= game_ptr.size() - 3) {
+      qFatal("navi->npc_addr out of bounds: %zu", std::size_t(navi->npc_addr));
+  }
   game[ navi->npc_addr   ] = navi->npc_R;
   game[ navi->npc_addr+1 ] = navi->npc_G;
   game[ navi->npc_addr+2 ] = navi->npc_B;
   game[ navi->npc_addr+3 ] = navi->npc_a;
-  
+
+  if (navi->enemy_addr >= game_ptr.size() - 3) {
+      qFatal("navi->enemy_addr out of bounds: %zu", std::size_t(navi->enemy_addr));
+  }
   game[ navi->enemy_addr   ] = navi->enemy_R;
   game[ navi->enemy_addr+1 ] = navi->enemy_G;
   game[ navi->enemy_addr+2 ] = navi->enemy_B;
   game[ navi->enemy_addr+3 ] = navi->enemy_a;
-  
+
+  if (navi->sign_addr >= game_ptr.size() - 3) {
+      qFatal("navi->sign_addr out of bounds: %zu", std::size_t(navi->sign_addr));
+  }
   game[ navi->sign_addr   ] = navi->sign_gstone_R;
   game[ navi->sign_addr+1 ] = navi->sign_gstone_G;
   game[ navi->sign_addr+2 ] = navi->sign_gstone_B;
   game[ navi->sign_addr+3 ] = navi->sign_gstone_a;
   
+  if (navi->check_addr >= game_ptr.size() - 3) {
+      qFatal("navi->check_addr out of bounds: %zu", std::size_t(navi->check_addr));
+  }
   game[ navi->check_addr   ] = navi->check_spots_R;
   game[ navi->check_addr+1 ] = navi->check_spots_G;
   game[ navi->check_addr+2 ] = navi->check_spots_B;
   game[ navi->check_addr+3 ] = navi->check_spots_a;
-  
+  if (navi->boss_addr >= game_ptr.size() - 3) {
+      qFatal("navi->boss_addr out of bounds: %zu", std::size_t(navi->boss_addr));
+  }
   game[ navi->boss_addr   ] = navi->boss_R;
   game[ navi->boss_addr+1 ] = navi->boss_G;
   game[ navi->boss_addr+2 ] = navi->boss_B;
   game[ navi->boss_addr+3 ] = navi->boss_a;
-
-  game_ptr = &game;
 
   free( list );
   free( navi );
 }
 
 
+}
 
-
+}

@@ -2,7 +2,7 @@
 #include <QString>
 
 #include <Common/game.hpp>
-#include <Randomiser/items.h>
+#include <Randomiser/args.h>
 #include <colors/custom_colors.h>
 
 namespace OoT_Randomizer {
@@ -10,10 +10,11 @@ namespace Common {
 
 void randomize(std::vector<unsigned char> &data, bool randomize_chests, bool randomize_colors, std::uint64_t seed) {
     if (randomize_chests) {
-        OoT_Randomizer::Randomizer::randomize_file(data);
+        OoT_Randomizer::Randomizer::Args args;
+        args.randomize(data);
     }
     if (randomize_colors) {
-        OoT_Randomizer::CustomColors::custom_colors(data);
+        //OoT_Randomizer::CustomColors::custom_colors(data);
     }
 }
 
