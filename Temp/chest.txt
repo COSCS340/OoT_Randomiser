@@ -89,6 +89,48 @@ chests[x]->flags = 0x5aa1;
 chests[x]->available = false;
 chests[x]->used = false;
 
+chests[x] = new Chest;
+chests[x]->name = "Main Chamber";
+chests[x]->offset = 0x000A0823;
+chests[x]->flags = 0x03;
+chests[x]->available = true;
+chests[x]->used = false;
+
+chests[x] = new Chest;
+chests[x]->name = "Basement River Room";
+chests[x]->offset = 0x000A5904;
+chests[x]->flags = 0x04;
+chests[x]->available = true;
+chests[x]->used = false;
+
+chests[x] = new Chest;
+chests[x]->name = "Slingshot Room Large";
+chests[x]->offset = 0x000A00A1;
+chests[x]->flag = 0x01;
+chests[x]->available = true;
+chests[x]->used = false;
+
+chests[x] = new Chest;
+chests[x]->name = "Slingshot Room Small";
+chests[x]->offset = 0x000A5905;
+chests[x]->flag = 0x05;
+chests[x]->available = true;
+chests[x]->used = false;
+
+chests[x] = new Chest;
+chests[x]->name = "Compass Room Large";
+chests[x]->offset = 0x000A0802;
+chests[x]->flag = 0x02;
+chests[x]->available = true;
+chests[x]->used = false;
+
+chests[x] = new Chest;
+chests[x]->name = "Compass Room Small";
+chests[x]->offset = 0x000A5906;
+chests[x]->flag = 0x06;
+chests[x]->available = true;
+chests[x]->used = false;
+
 /* Jabu-Jabu's Belly */
 
 chests[x] = new Chest;
