@@ -1,0 +1,19 @@
+Step 1:	Open the interactive map
+
+Step 2: Go to Kokiri Forest, Room 0
+
+Step 3: Open ZOOTDEC.z64 in a hex editor
+
+Step 4: Go to address 0x02081000 (This is Room 0)
+
+Step 5: Find a Kokiri Child in the interactive map, look at which number in the list it is
+
+Step 6: Add (n * 16) to 0x02081000 with n being the number the kokiri is in the list (the first thing in the list is 0)
+
+Step 7: Change the Y position to something negative or 0
+
+Step 8: Load the game in an emulator, look at which kokiri moved
+
+Steo 9: If it wasn't either Mido in front of the Deku Tree, or the kid in front of the exit, do it again
+
+Step 10: If it was them, record the offset of the y position so we can edit it in the randomiser
