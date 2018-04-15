@@ -1,3 +1,15 @@
+2081144 - Blocking Kid 
+2081148 - Blocking Kid Y Coordinate
+2081152 - Change this to ff0[0-6] to change to another kid
+
+20811a4 - Mido (This value can be changed to 0163 to make him a Kokiri Kid)
+20811a8 - Mido Y Coordinate
+20811b2 - If Mido is changed into a Kokiri Kid, change this to ff0[0-6] to change to other kids
+
+2081510 - Saria (Change her to something else to skip her running up in the beginning)
+
+----------------------------------------------------------------------------------------------------------------
+
 Step 1:	Open the interactive map
 
 Step 2: Go to Kokiri Forest, Room 0
