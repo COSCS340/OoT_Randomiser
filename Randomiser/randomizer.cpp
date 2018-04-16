@@ -16,7 +16,7 @@ namespace OoT_Randomizer {
 
 namespace Randomizer {
 
-Args::Args() noexcept : chests{{0}}, combos{{0}}, items{{0}}  {
+Args::Args(uint64_t seed) noexcept : chests{{0}}, combos{{0}}, items{{0}}, seed{seed} {
     makeChests();
     sortChests();
     makeItems();
@@ -916,7 +916,7 @@ int real_main(QStringList args) {
     static_assert(R::GAME_SIZE < INTPTR_MAX, "Game size must not exceed INTPTR_MAX");
     file.read(reinterpret_cast<char*>(data.data()), qint64(data.size()));
     {
-        Args arg;
+        Args arg{seed};
         arg.randomize(data);
     }
 
@@ -1015,15 +1015,11 @@ void actorSetup(uint8_t* data)
 }
 
 }
-
+#if 0
 int main(int argc, char** argv)
 {
     namespace R = OoT_Randomizer::Randomizer;
-    R::Args arg;
-    FILE* output;
     std::string name;
-    uint8_t temp;
-    std::size_t i;
 
     if (!argv[0]) {
         qCritical("NULL argv[0] pointer");
@@ -1048,6 +1044,7 @@ int main(int argc, char** argv)
     } else {
         seed = 0;
     }
+    R::Args arg{seed};
     QFile input{args.at(0)};
     if (!input.open(QIODevice::ReadOnly)) {
         return 1;
@@ -1081,3 +1078,4 @@ int main(int argc, char** argv)
 
     return(0);
 }
+#endif

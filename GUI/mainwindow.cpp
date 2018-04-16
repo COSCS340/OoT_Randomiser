@@ -67,7 +67,6 @@ void MainWindow::on_seedRNGButton_pressed()
 
 void MainWindow::on_exitWithoutSaving_pressed()
 {
-    qWarning("destroyed dialog");
     QApplication::quit();
 }
 
@@ -83,7 +82,6 @@ void MainWindow::on_progress(QString str, int value) {
     ui->progressBar->setValue(value);
 }
 
-
 void MainWindow::onOutputfilenameChosen(QString arg) {
     ui->outputFileName->setText(m_ofName = arg);
     ui->selectOutputFile->setEnabled(true);
@@ -94,6 +92,12 @@ void MainWindow::onRunComplete() {
     Q_ASSERT(m_future);
     on_progress(m_future->future().result(), 100);
     m_future.reset();
+}
+
+namespace {
+QString Execute(std::shared_ptr<OffThreadRandomizer> randomizer, QString fname, QString ofname) {
+    return randomizer->Execute(fname, ofname);
+}
 }
 
 }
@@ -111,13 +115,22 @@ void OoT_Randomizer::Ui::MainWindow::on_selectOutputFile_clicked(bool checked)
     }
 }
 
+void OoT_Randomizer::Ui::MainWindow::setSeed(std::uint64_t seed) {
+    m_prng.seed(seed);
+    ui->rNGSeedLineEdit->setText(QString().sprintf("%llu", static_cast<unsigned long long>(seed)));
+}
+
 void OoT_Randomizer::Ui::MainWindow::on_runButton_released()
 {
     if (!m_future) {
         m_future.reset(new QFutureWatcher<QString>());
-        auto randomizer = std::make_shared<OffThreadRandomizer>();
+        QString input_file = ui->inputFileName->text();
+        QString output_file = ui->outputFileName->text();
+        input_file.detach();
+        output_file.detach();
+        auto randomizer = std::make_shared<OffThreadRandomizer>(m_shouldRandomizeChestContents, m_shouldRandomizeColors);
         connect(randomizer.get(), &OffThreadRandomizer::ReportProgress, this, &MainWindow::on_progress, Qt::QueuedConnection);
-        m_future->setFuture(QtConcurrent::run(&OffThreadRandomizer::ExecuteOnFile, randomizer, std::move(m_fName), std::move(m_ofName), m_shouldRandomizeChestContents, m_shouldRandomizeColors));
+        m_future->setFuture(QtConcurrent::run(&Execute, randomizer, std::move(input_file), std::move(output_file)));
         connect(m_future.get(), &QFutureWatcher<QString>::finished, this, &MainWindow::onRunComplete);
     }
 }
