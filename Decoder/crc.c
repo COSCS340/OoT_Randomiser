@@ -20,15 +20,30 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+// April 15, 2018 - make OK for use in C++
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include <assert.h>
 
-#define ROL(i, b) (((i) << (b)) | ((i) >> (32 - (b))))
-#define BYTES2LONG(b) ( (b)[0] << 24 | \
+static inline uint32_t ROL(uint32_t i, uint8_t b) {
+    assert(b && b < 32);
+    b &= 31;
+    return (i << b) | (i >> ((32 - b) & 31));
+}
+
+static inline uint32_t BYTES2LONG(unsigned char b[static 4]) {
+    return ((uint32_t)( (b)[0] << 24 | \
                         (b)[1] << 16 | \
                         (b)[2] <<  8 | \
-                        (b)[3] )
+                        (b)[3] ));
+}
 
 #define N64_HEADER_SIZE  0x40
 #define N64_BC_SIZE      (0x1000 - N64_HEADER_SIZE)
@@ -44,12 +59,12 @@
 #define CHECKSUM_CIC6106 0x1FEA617A
 
 
-unsigned int crc_table[256];
+static uint32_t crc_table[256];
 
-void gen_table() 
+// April 15, 2018 -- renamed with `OoT_Randomizer` prefix
+void OoT_Randomizer_crc_init(void)
 {
-	unsigned int crc, poly;
-	int	i, j;
+    uint32_t crc, poly, i, j;
 
 	poly = 0xEDB88320;
 	for (i = 0; i < 256; i++) {
@@ -62,10 +77,10 @@ void gen_table()
 	}
 }
 
-unsigned int crc32(unsigned char *data, int len) 
+static uint32_t crc32(unsigned char *data, size_t len)
 {
-	unsigned int crc = ~0;
-	int i;
+    uint32_t crc = ~0U;
+    size_t i;
 
 	for (i = 0; i < len; i++) {
 		crc = (crc >> 8) ^ crc_table[(crc ^ data[i]) & 0xFF];
@@ -75,7 +90,7 @@ unsigned int crc32(unsigned char *data, int len)
 }
 
 
-int N64GetCIC(unsigned char *data) 
+static uint32_t N64GetCIC(unsigned char *data)
 {
 	switch (crc32(&data[N64_HEADER_SIZE], N64_BC_SIZE)) {
 		case 0x6170A4A1: return 6101;
@@ -88,14 +103,14 @@ int N64GetCIC(unsigned char *data)
 	return 0;
 }
 
-int N64CalcCRC(unsigned int *crc, unsigned char *data) 
+static bool N64CalcCRC(uint32_t *crc, unsigned char *data)
 {
-	int bootcode, i;
-	unsigned int seed;
+    uint32_t bootcode, i;
+    uint32_t seed;
 
-	unsigned int t1, t2, t3;
-	unsigned int t4, t5, t6;
-	unsigned int r, d;
+    uint32_t t1, t2, t3;
+    uint32_t t4, t5, t6;
+    uint32_t r, d;
 
 
 	switch ((bootcode = N64GetCIC(data))) {
@@ -120,7 +135,7 @@ int N64CalcCRC(unsigned int *crc, unsigned char *data)
 
 	i = CHECKSUM_START;
 	while (i < (CHECKSUM_START + CHECKSUM_LENGTH)) {
-		d = BYTES2LONG(&data[i]);
+        d = (uint32_t)BYTES2LONG(&data[i]);
 		if ((t6 + d) < t6) t4++;
 		t6 += d;
 		t3 ^= d;
@@ -150,66 +165,42 @@ int N64CalcCRC(unsigned int *crc, unsigned char *data)
 	return 0;
 }
 
-void fix_crc (char *filename)
+void OoT_Randomizer_fix_crc (unsigned char *buffer, size_t size)
 {
-	FILE *fin;
-	int i;
-	
-		unsigned char CRC1[4];
-		unsigned char CRC2[4];
-	unsigned int crc[2];
-	unsigned char *buffer;
-	gen_table();
-	fin = fopen(filename, "rb+");
-	if(!fin){exit(0);}
-	
-	if (!(buffer = (unsigned char*)malloc((CHECKSUM_START + CHECKSUM_LENGTH)))) {
-		fclose(fin);
-	}
+    unsigned char CRC1[4] = {0};
+    unsigned char CRC2[4] = {0};
+    uint32_t crc[2] = {0};
+    if (size < CHECKSUM_START + CHECKSUM_LENGTH) abort();
 
-	if (fread(buffer, 1, (CHECKSUM_START + CHECKSUM_LENGTH), fin) != (CHECKSUM_START + CHECKSUM_LENGTH)) {
-		fclose(fin);
-		free(buffer);
-	
-	}
-	
-	if (N64CalcCRC(crc, buffer)) {
-	
-	}
-	else {
-		unsigned int kk1=crc[0];
-		unsigned int kk2=crc[1];
+    if (!N64CalcCRC(crc, buffer)) {
+        size_t i;
+        uint32_t kk1=crc[0];
+        uint32_t kk2=crc[1];
 		for(i=0;i<4;i++)
 		{
 		CRC1[i] = (kk1 >> (24-8*i))&0xFF;
 		CRC2[i] = (kk2 >> (24-8*i))&0xFF;
 		}
 		
-		if (crc[0] == BYTES2LONG(&buffer[N64_CRC1]))
-		{}	//printf("(Good)\n");
-		else
-			//printf("\nFixing CRC 1...");
-			fseek(fin,N64_CRC1,SEEK_SET);
-			for(i=0;i<4;i++)
-			{fputc(CRC1[i],fin);}
-			//printf(" Done.");
+        if (crc[0] != (uint32_t)BYTES2LONG(&buffer[N64_CRC1])) {
+            // April 15, 2018 -- place in brackets
+            if (N64_CRC1 > size - sizeof (CRC1))
+                abort();
+            else
+                memcpy(buffer + N64_CRC1, CRC1, sizeof (CRC1));
+        }
 
-		if (crc[1] == BYTES2LONG(&buffer[N64_CRC2]))
-		{
-		
-		}
-		else
-		{
-			//printf("\nFixing CRC 2...");
-			fseek(fin,N64_CRC2,SEEK_SET);
-			for(i=0;i<4;i++)
-			{fputc(CRC2[i],fin);}
-			//printf(" Done.");
+        if (crc[1] != (uint32_t)BYTES2LONG(&buffer[N64_CRC2])) {
+            // April 15, 2018 -- place in brackets
+            if (N64_CRC2 > size - sizeof (CRC2))
+                abort();
+            else
+                memcpy(buffer + N64_CRC2, CRC2, sizeof (CRC2));
 		}
 	}
-
-	
-	
-	fclose(fin);
-	free(buffer);
 }
+
+// April 15, 2018 - make OK for use in C++
+#ifdef __cplusplus
+}
+#endif

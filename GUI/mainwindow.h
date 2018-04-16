@@ -21,17 +21,22 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
+
+    void setSeed(std::uint64_t seed);
+
     ~MainWindow();
+
 public slots:
     void on_progress(QString msg, int progress);
-private slots:
-    void on_exitWithoutSaving_released();
-
-    void on_rNGSeedLineEdit_editingFinished();
 
     void on_randomizeColorsCheckBox_clicked(bool checked);
 
     void on_randomizeChestContentsCheckBox_clicked(bool checked);
+
+private slots:
+    void on_exitWithoutSaving_released();
+
+    void on_rNGSeedLineEdit_editingFinished();
 
     void on_randomizeRequirementsCheckBox_clicked(bool checked);
 
