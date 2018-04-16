@@ -1,5 +1,5 @@
-#ifndef OFFTHREADRANDOMIZER_H
-#define OFFTHREADRANDOMIZER_H
+#ifndef OOT_RANDOMIZER_OFFTHREADRANDOMIZER_H
+#define OOT_RANDOMIZER_OFFTHREADRANDOMIZER_H
 
 #include <QObject>
 #include <memory>
@@ -12,20 +12,20 @@ class OffThreadRandomizer : public QObject
 {
     Q_OBJECT
 public:
-    explicit OffThreadRandomizer(QObject *parent = nullptr);
-
+    QString Execute(QString fname, QString ofname);
+    explicit OffThreadRandomizer(bool randomizeChests, bool randomizeColors);
     void operator()(QString str, quint32 progress);
-    static QString ExecuteOnFile(std::shared_ptr<OffThreadRandomizer> randomizer, QString fname, QString ofname, bool randomizeChests, bool randomizeColors);
+    //static QString ExecuteOnFile(std::shared_ptr<OffThreadRandomizer> randomizer, QString fname, QString ofname);
 
 signals:
     void ReportProgress(QString str, quint32 progress);
-public slots:
 private:
-    QString Execute(QString fname, QString ofname, bool randomizeChests, bool randomizeColors);
+    bool randomizeChests;
+    bool randomizeColors;
 };
 
 }
 
 }
 
-#endif // OFFTHREADRANDOMIZER_H
+#endif // OOT_RANDOMIZER_OFFTHREADRANDOMIZER_H

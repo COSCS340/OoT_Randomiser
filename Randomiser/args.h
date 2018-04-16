@@ -23,7 +23,7 @@ struct Args
 {
     // If this throws std::bad_alloc, we are screwed, as Qt cannot recover from
     // OOM anyway.  Just abort.
-    Args() noexcept;
+    Args(uint64_t seed) noexcept;
     ~Args();
     void randomize(::std::vector<uint8_t> &vec);
 private:
@@ -42,6 +42,7 @@ private:
     std::vector<uint8_t> combo;
     void randomise();
     void checkCombo(uint8_t);
+    uint64_t seed;
 };
 
 }

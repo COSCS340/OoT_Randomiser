@@ -43,9 +43,9 @@ SOURCES += \
     GUI/main.cpp \
     GUI/mainwindow.cpp \
     GUI/offthreadrandomizer.cpp \
-    Randomiser/color_driver.cpp \
-    Randomiser/main.cpp \
-    Randomiser/randomizer.cpp
+    Randomiser/randomizer.cpp \
+    Decoder/decoder.cpp \
+    Decoder/crc.c
 
 HEADERS += \
     colors/custom_colors.h \
@@ -56,7 +56,9 @@ HEADERS += \
     Randomiser/args.h \
     Randomiser/chests.h \
     Randomiser/custom_colors.h \
-    Randomiser/items.h
+    Randomiser/items.h \
+    Decoder/crc.h \
+    Decoder/decoder.hpp
 
 FORMS += \
     GUI/mainwindow.ui

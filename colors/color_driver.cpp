@@ -38,6 +38,7 @@ void custom_colors(std::vector<unsigned char> &game) {
         game.at(offset + 3) = navi.a;
     }
 }
+
 int real_main( int argc, char** argv) {
     (void)argc;
     try {
