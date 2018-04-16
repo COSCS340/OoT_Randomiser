@@ -949,7 +949,7 @@ void Args::randomise() {
 
         // If it's the last available chest, and there are still progression items
         // then force a progression item to be placed, else pick a random item
-        if (chests_available == 1 and num_progression != 0)
+        if (chests_available <= 2 and num_progression != 0)
             rItem = ::std::size_t(rand()) % ::std::size_t(num_progression);
         else
             rItem = ::std::size_t(rand()) % (NUM_ITEMS - i);
