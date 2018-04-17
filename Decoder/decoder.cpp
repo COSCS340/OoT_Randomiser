@@ -9,8 +9,8 @@ namespace OoT_Randomizer {
 namespace Decoder {
 
 #define INTSIZE 0x01000000    //16,777,216 bytes
-#define COMPSIZE 0x02000000   //33,554,432 bytes
-#define DECOMPSIZE 0x04000000 //67,108,864 bytes
+//#define COMPSIZE 0x02000000   //33,554,432 bytes
+//#define DECOMPSIZE 0x04000000 //67,108,864 bytes
 
 static const thread_local uint32_t* inROM;
 static thread_local uint32_t* outROM;
@@ -32,6 +32,7 @@ static bool setOffsets(uint32_t, Offsets);
 static uint32_t findTable();
 
 bool loadAndDecodeFile(const std::vector<uint8_t> &in_buf, std::vector<uint8_t> &buf) {
+    const size_t COMPSIZE = in_buf.size(), const DECOMPSIZE = buf.size();
     uint32_t tableOffset{0}, tableSize{0};
     Offsets offsets{0, 0, 0, 0}, curFile{0, 0, 0, 0};
 
@@ -57,8 +58,8 @@ bool loadAndDecodeFile(const std::vector<uint8_t> &in_buf, std::vector<uint8_t> 
     }
     static_assert(alignof (uint32_t) <= 4, "uint32_t must have an alignment <= 4");
     static_assert(sizeof(uint32_t) == 4, "uint32_t must have size 4");
-    static_assert(COMPSIZE == 2*INTSIZE, "COMPSIZE must be twice INTSIZE");
-    static_assert(DECOMPSIZE == 4*INTSIZE, "DECOMPSIZE must be 4 times INTSIZE");
+    //static_assert(COMPSIZE == 2*INTSIZE, "COMPSIZE must be twice INTSIZE");
+    //static_assert(DECOMPSIZE == 4*INTSIZE, "DECOMPSIZE must be 4 times INTSIZE");
     static_assert(INTSIZE == (1UL << 24), "INTSIZE must equal (1 << 24)");
     inTable = inROM + (tableOffset >> 2);
     outTable = outROM + (tableOffset >> 2);
@@ -90,11 +91,12 @@ bool loadAndDecodeFile(const std::vector<uint8_t> &in_buf, std::vector<uint8_t> 
             if (size > COMPSIZE - curFile.startV) return false;
             if (curFile.startP >= COMPSIZE) return false;
             if (size > COMPSIZE - curFile.startP) return false;
+            if (curFile.endP < curFile.startP) return false;
             //Copy if decoded, decode if encoded
             if(curFile.endP == 0x00000000)
                 memcpy((char*)outROM + curFile.startV, (char*)inROM + curFile.startP, size);
             else
-                decode((uint8_t*)inROM + curFile.startP, COMPSIZE, (uint8_t*)outROM + curFile.startV, size);
+                decode((uint8_t*)inROM + curFile.startP, curFile.endP - curFile.startP, (uint8_t*)outROM + curFile.startV, size);
 
             //Clean up outROM's table
             curFile.startP = curFile.startV;
@@ -231,7 +233,7 @@ static bool decode(uint8_t* source, size_t compressed_size, uint8_t* decomp, siz
 
             //Calculate distance to move in destination
             //And the number of bytes to copy
-            dist = ((byte1 & 0xF) << 8) | byte2;
+            dist = uint32_t((byte1 & 0xF) << 8 | byte2);
             copyPlace = dstPlace - (dist + 1);
             numBytes = byte1 >> 4;
 
@@ -250,7 +252,9 @@ static bool decode(uint8_t* source, size_t compressed_size, uint8_t* decomp, siz
             if (decompSize - dstPlace > numBytes) return false;
             if (copyPlace >= decompSize) return false;
             if (decompSize - copyPlace > numBytes) return false;
-            memmove(decomp + dstPlace, decomp + copyPlace, numBytes);
+            if (numBytes) {
+                memmove(decomp + dstPlace, decomp + copyPlace, numBytes);
+            }
         }
 
         //Set up for the next read cycle

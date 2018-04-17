@@ -23,8 +23,8 @@ void randomize(std::vector<unsigned char> &data, bool randomize_chests, bool ran
 }
 
 QString Execute(QString const &in_file, QString const &out_file, bool randomize_chests, bool randomize_colors, std::uint64_t seed, std::function<void(QString, int)> *cb) {
-    auto data = std::vector<unsigned char>(COMPRESSED_GAME_SIZE);
-    auto compressed_data = std::vector<unsigned char>(COMPRESSED_GAME_SIZE);
+    auto data = std::vector<unsigned char>(GAME_SIZE);
+    auto compressed_data = std::vector<unsigned char>(GAME_SIZE);
     static_assert(GAME_SIZE == 1 << 26, "GAME_SIZE must equal 1 << 26");
     static_assert(alignof (uint32_t) <= 4, "uint32_t must have an alignment <= 4");
     static_assert(sizeof (uint32_t) == 4, "uint32_t must have size 4");
@@ -44,8 +44,13 @@ QString Execute(QString const &in_file, QString const &out_file, bool randomize_
             if (bytes_read > bytes_to_read) {
                 abort();
             } else if (bytes_read < bytes_to_read) {
-                if (0 == bytes_read) {
-                    return QStringLiteral("Preamature end of file reading from %1").arg(in_file);
+                if (0 == bytes_read && input_file.atEnd()) {
+                    if (true) {
+                        new_max -= std::size_t(bytes_to_read - bytes_read);
+                        compressed_data.resize(new_max);
+                    } else {
+                        return QStringLiteral("Preamature end of file reading from %1").arg(in_file);
+                    }
                 } else {
                     new_max -= std::size_t(bytes_to_read - bytes_read);
                 }
@@ -57,6 +62,7 @@ QString Execute(QString const &in_file, QString const &out_file, bool randomize_
             }
         }
     }
+    std::copy(compressed_data.begin(), compressed_data.end(), data.begin());
     loadAndDecodeFile(compressed_data, data);
 
     if (cb) {
