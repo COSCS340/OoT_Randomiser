@@ -32,7 +32,8 @@ static bool setOffsets(uint32_t, Offsets);
 static uint32_t findTable();
 
 bool loadAndDecodeFile(const std::vector<uint8_t> &in_buf, std::vector<uint8_t> &buf) {
-    const size_t COMPSIZE = in_buf.size(), const DECOMPSIZE = buf.size();
+    const size_t COMPSIZE = in_buf.size();
+    const size_t DECOMPSIZE = buf.size();
     uint32_t tableOffset{0}, tableSize{0};
     Offsets offsets{0, 0, 0, 0}, curFile{0, 0, 0, 0};
 
