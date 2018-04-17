@@ -57,10 +57,10 @@ int main(int argc, char *argv[])
 
         return a.exec();
     } else {
-        std::function<void(QString, int)> x = [](QString x, int y) { (void)x, (void)y; };
+        std::function<void(QString, int)> x = [](QString x, int y) { Q_UNUSED(x); Q_UNUSED(y); };
         QString res = ::OoT_Randomizer::Common::Execute(pos_args.at(0), pos_args.at(1), randomize_chests, randomize_colors, seed, &x);
         if (res.length()) {
-            qDebug() << res;
+            qCritical("Fatal error: %s", qUtf8Printable(res));
             return 1;
         }
     }
