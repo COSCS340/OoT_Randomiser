@@ -8,7 +8,7 @@
 
 Synopsis:
 
-The goal of our team was to write a program with a graphical user interface that would modify
+    The goal of our team was to write a program with a graphical user interface that would modify
 an existing Nintendo 64 ROM file. With a few settings selected and the press of a button, the 
 user would have a brand new ROM file prepared for them that will be compatible with most 
 Nintendo 64 emulators. The randomizer program was designed to randomly switch items around within
@@ -20,7 +20,7 @@ gameplay.
 
 Motivation:
 
-The motivation for this project is that many people, including our team, love the game Legend
+    The motivation for this project is that many people, including our team, love the game Legend
 of Zelda: Ocarina of Time, but playing the same game many times in a row can be boring. This
 tool will allow the game to be different every time it is played, prompting new challenges and
 greatly enhancing replay value.  
@@ -89,12 +89,12 @@ listed below ) to discover more information about how the .z64 file is structure
 
 Technology/Resources:
 
--Utility of Time - Ocarina of Time level editor/model viewer + editor. version .9. Copyright 2006-2008.
--https://wiki.cloudmodding.com/oot/
--C++ IDEs / C++ compilers, in particular Qt Creator
--GitHub, for code hosting and code review
--Online OoT Interactive Map at https://ootmap.com
--Groupme App (group communication)
+- Utility of Time - Ocarina of Time level editor/model viewer + editor. version .9. Copyright 2006-2008.
+- https://wiki.cloudmodding.com/oot/
+- C++ IDEs / C++ compilers, in particular Qt Creator
+- GitHub, for code hosting and code review
+- Online OoT Interactive Map at https://ootmap.com
+- Groupme App (group communication)
 
 Tests:
 After compiling the project and making sure the game elements were actually randomized, we made sure 
@@ -115,21 +115,21 @@ that could lead to getting stuck at a particular point if an item is misplaced o
 with respect to the item dependencies in the code.  
 
 Modules/Components:
-Qt GUI (written by Demi)
-    -Small, manageable window with randomizer seed options
-    -Character color selection
-    -Drop-down to choose file path
-    -Calls Randomizer to copy and edit file 
-Randomizer written in C++ and will modify .z64 file type (written by Chris)
-    -Decompresses .z64 file
-    -Stores entire binary game file (64MB) as an array
-    -Changes indexes (addresses) of elements based on randomized values
-    -Writes entire edited file to a new .z64 file for user
-Color Selector
-    -Changes RGB or RGBa values at specified location in file
-    -User selected color preferences
-    -Change color of player clothes/gear and Navi ( the fairy )
-    -Not Finished 
++ Qt GUI (written by Demi)
+    - Small, manageable window with randomizer seed options
+    - Character color selection
+    - Drop-down to choose file path
+    - Calls Randomizer to copy and edit file 
++ Randomizer written in C++ and will modify .z64 file type (written by Chris)
+    - Decompresses .z64 file
+    - Stores entire binary game file (64MB) as an array
+    - Changes indexes (addresses) of elements based on randomized values
+    - Writes entire edited file to a new .z64 file for user
++Color Selector
+    - Changes RGB or RGBa values at specified location in file
+    - User selected color preferences
+    - Change color of player clothes/gear and Navi ( the fairy )
+    - Not Finished 
 
 
 Team
@@ -149,9 +149,6 @@ not integrated into the project. Cole researched file structure with Chris and c
 All group members participated in brainstorming, testing, and writing the reports throughout the
 semester. Generally, Chris and Demi spearheaded the construction of the project and the merging of
 their respective components. 
-
-
-
 
 Project Management
 
