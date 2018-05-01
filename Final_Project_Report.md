@@ -1,6 +1,9 @@
 #LoZ: OoT Randomizer Final Report
+
 ##Team_Z (Team 7)
+
 ###Chris Muncey, Isaac Stone, Demi Obenour, Cole Flemmons
+
 ###Introduction
 
 Synopsis:
