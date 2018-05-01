@@ -1,10 +1,10 @@
-#LoZ: OoT Randomizer Final Report
+# LoZ: OoT Randomizer Final Report
 
-##Team_Z (Team 7)
+## Team_Z (Team 7)
 
-###Chris Muncey, Isaac Stone, Demi Obenour, Cole Flemmons
+### Chris Muncey, Isaac Stone, Demi Obenour, Cole Flemmons
 
-###Introduction
+### Introduction
 
 Synopsis:
 
@@ -89,12 +89,12 @@ listed below ) to discover more information about how the .z64 file is structure
 
 Technology/Resources:
 
-Utility of Time - Ocarina of Time level editor/model viewer + editor. version .9. Copyright 2006-2008.
-https://wiki.cloudmodding.com/oot/
-C++ IDEs / C++ compilers, in particular Qt Creator
-GitHub, for code hosting and code review
-Online OoT Interactive Map at https://ootmap.com
-Groupme App (group communication)
+-Utility of Time - Ocarina of Time level editor/model viewer + editor. version .9. Copyright 2006-2008.
+-https://wiki.cloudmodding.com/oot/
+-C++ IDEs / C++ compilers, in particular Qt Creator
+-GitHub, for code hosting and code review
+-Online OoT Interactive Map at https://ootmap.com
+-Groupme App (group communication)
 
 Tests:
 After compiling the project and making sure the game elements were actually randomized, we made sure 
@@ -115,7 +115,7 @@ that could lead to getting stuck at a particular point if an item is misplaced o
 with respect to the item dependencies in the code.  
 
 Modules/Components:
--Qt GUI (written by Demi)
+Qt GUI (written by Demi)
     -Small, manageable window with randomizer seed options
     -Character color selection
     -Drop-down to choose file path
