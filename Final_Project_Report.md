@@ -4,11 +4,9 @@
 
 ### Chris Muncey, Isaac Stone, Demi Obenour, Cole Flemmons
 
-### Introduction
+#### Introduction
 
-Synopsis:
-
-    The goal of our team was to write a program with a graphical user interface that would modify
+The goal of our team was to write a program with a graphical user interface that would modify
 an existing Nintendo 64 ROM file. With a few settings selected and the press of a button, the 
 user would have a brand new ROM file prepared for them that will be compatible with most 
 Nintendo 64 emulators. The randomizer program was designed to randomly switch items around within
@@ -18,21 +16,21 @@ to further enhance the gaming experience. Other modifications were to be added t
 more streamlined, such as removing various cut-scenes and elimination some of the more tedious
 gameplay.
 
-Motivation:
+#### Motivation:
 
-    The motivation for this project is that many people, including our team, love the game Legend
+The motivation for this project is that many people, including our team, love the game Legend
 of Zelda: Ocarina of Time, but playing the same game many times in a row can be boring. This
 tool will allow the game to be different every time it is played, prompting new challenges and
 greatly enhancing replay value.  
 
-Approach:
+#### Approach:
 
 The code contains several parts: the randomizer in C++, a GUI using C++ and Qt, a color randomizer
 in C++, a chest randomizer, and others. Our approach was to build compartmentally. Each group
 member took on a different piece of the project, and the different parts came together in the
 end to create our randomizer.
 
-Changes to Design/Requirements: 
+#### Changes to Design/Requirements: 
 
 Initially, we were not sure if the N64 ROM files could be modified successfully, as the project
 would require. After realizing the initial goal of a simple randomizer was attainable, we sought
@@ -42,7 +40,7 @@ experience. Intense debugging and assimilation of the color changer were not abl
 due to time constraints and busy class schedules (Two team members were taking cs360 and two team
 members were working on senior projects).
 
-Results/Conclusions:
+#### Results/Conclusions:
 
 The resulting product is a working randomizer that successfully randomizes the first half of the
 game and produces a playable game that can be run via command line arguments or the GUI. The resulting
@@ -52,7 +50,7 @@ not finished and is not able to run standalone, unfortunately. Regarding the fun
 initial project proposal, it is fair to say that we completed the main goals of our project. With
 more time, it would definitely be possible to implement the supplemental functionalities we had intended. 
 
-Customer/Developer Value
+#### Customer/Developer Value
 
 (No Changes)
 
@@ -74,9 +72,9 @@ how we built it and how it replaces and inserts values to change the binary game
 of the GUI for the program was developed using Qt libraries and environment, so any developer interested
 in basic construction of how a GUI is constructed will be able to learn from our project as well. 
 
-Technology
+#### Technology
 
-Changes From Status Reports: 
+#### Changes From Status Reports: 
 
 After completing the functionality of a working game randomizer, we wanted to build an easily accessible
 GUI and a supplemental color changer. We also wanted to remove some of the more tedious elements of the
@@ -87,7 +85,7 @@ initial goal of a basic implementation, the only technology added included using
 IDE for development. Other resources were used as references ( such as some of the software and websites
 listed below ) to discover more information about how the .z64 file is structured.
 
-Technology/Resources:
+#### Technology/Resources:
 
 - Utility of Time - Ocarina of Time level editor/model viewer + editor. version .9. Copyright 2006-2008.
 - https://wiki.cloudmodding.com/oot/
@@ -96,7 +94,7 @@ Technology/Resources:
 - Online OoT Interactive Map at https://ootmap.com
 - Groupme App (group communication)
 
-Tests:
+#### Tests:
 After compiling the project and making sure the game elements were actually randomized, we made sure 
 that the changes made did not crash the game and that the game was beatable (or at least the portion 
 that we changed was beatable). This required playthroughs to test the game and was an aspect of 
@@ -105,7 +103,7 @@ and fix bugs that arose. The removal of tedious obstacles sometimes required the
 game object or simply moving it somewhere else, which could trigger unpredictable behavior. We had
 to make sure the game would allow for the variations we made.
 
-Test Results:
+#### Test Results:
 
 Simply playing through the our edited section of the game was enough to test cutscenes and obstacle
 removals. If the game did not crash immediately, no glitches or other hidden issues presented
@@ -114,7 +112,7 @@ with Chris’s randomizing algorithm, but there was always a possibility of a ba
 that could lead to getting stuck at a particular point if an item is misplaced or a mistake is made
 with respect to the item dependencies in the code.  
 
-Modules/Components:
+#### Modules/Components:
 + Qt GUI (written by Demi)
     - Small, manageable window with randomizer seed options
     - Character color selection
@@ -132,7 +130,7 @@ Modules/Components:
     - Not Finished 
 
 
-Team
+#### Team
 
 After the goal of the project was decided, team meetings generally took place once per sprint to allow
 time for other class work. In the final month before the project was due, meeting frequency and sprint
@@ -150,7 +148,7 @@ All group members participated in brainstorming, testing, and writing the report
 semester. Generally, Chris and Demi spearheaded the construction of the project and the merging of
 their respective components. 
 
-Project Management
+#### Project Management
 
 Throughout the duration of the project it became more apparent that it is important to examine the scope
 of the project frequently and have a clear goal in mind for all team members at each sprint. It was very
@@ -164,7 +162,7 @@ semester where there were not many goals set. The main reason for this was becau
 classes taking up time away from the project. 
 
 
-Reflection
+#### Reflection
 
 In retrospect, our group has begun to understand the difficulty of building a project with regard to group
 performance as a result of communication, clear goals, and frequency of group meetings. It has come to our 
