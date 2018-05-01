@@ -4,7 +4,7 @@
 
 ### Chris Muncey, Isaac Stone, Demi Obenour, Cole Flemmons
 
-#### Introduction
+### Introduction
 
 The goal of our team was to write a program with a graphical user interface that would modify
 an existing Nintendo 64 ROM file. With a few settings selected and the press of a button, the 
@@ -50,7 +50,7 @@ not finished and is not able to run standalone, unfortunately. Regarding the fun
 initial project proposal, it is fair to say that we completed the main goals of our project. With
 more time, it would definitely be possible to implement the supplemental functionalities we had intended. 
 
-#### Customer/Developer Value
+### Customer/Developer Value
 
 (No Changes)
 
@@ -72,7 +72,7 @@ how we built it and how it replaces and inserts values to change the binary game
 of the GUI for the program was developed using Qt libraries and environment, so any developer interested
 in basic construction of how a GUI is constructed will be able to learn from our project as well. 
 
-#### Technology
+### Technology
 
 #### Changes From Status Reports: 
 
@@ -130,7 +130,7 @@ with respect to the item dependencies in the code.
     - Not Finished 
 
 
-#### Team
+### Team
 
 After the goal of the project was decided, team meetings generally took place once per sprint to allow
 time for other class work. In the final month before the project was due, meeting frequency and sprint
@@ -148,7 +148,7 @@ All group members participated in brainstorming, testing, and writing the report
 semester. Generally, Chris and Demi spearheaded the construction of the project and the merging of
 their respective components. 
 
-#### Project Management
+### Project Management
 
 Throughout the duration of the project it became more apparent that it is important to examine the scope
 of the project frequently and have a clear goal in mind for all team members at each sprint. It was very
@@ -162,7 +162,7 @@ semester where there were not many goals set. The main reason for this was becau
 classes taking up time away from the project. 
 
 
-#### Reflection
+### Reflection
 
 In retrospect, our group has begun to understand the difficulty of building a project with regard to group
 performance as a result of communication, clear goals, and frequency of group meetings. It has come to our 
